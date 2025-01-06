@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "Template FullStack pour facilement déployer avec docker un projet React/Express/MySQL",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev-front": "cd frontend && npm run dev"
+    "dev-front": "cd frontend && npm run dev",
+    "dev-back": "cd backend && npm run dev",
+    "dev": "concurrently \"npm run dev-front\" \"npm run dev-back\"",
+    "db:migrate": "cd backend && npm run db:migrate"
   },
   "keywords": [],
   "author": "",
