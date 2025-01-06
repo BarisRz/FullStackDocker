@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Template FullStack pour facilement déployer avec docker un projet React/Express/MySQL",
   "scripts": {
+    "install": "concurrently \"cd frontend && npm install\" \"cd backend && npm install\"",
     "dev-front": "cd frontend && npm run dev",
     "dev-back": "cd backend && npm run dev",
     "dev": "concurrently \"npm run dev-front\" \"npm run dev-back\"",
