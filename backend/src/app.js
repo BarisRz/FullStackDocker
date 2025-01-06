@@ -1,32 +1,36 @@
 const express = require("express");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const router = require("./router");
+
 const app = express();
 
-const cors = require("cors");
-
+// Middleware CORS
 app.use(
   cors({
-    origin: [
-      process.env.FRONTEND_URL, // URL of the frontend, add more if needed
-    ],
-    credentials: true, // Allow cookies/headers to be sent from the frontend
+    origin: process.env.FRONTEND_URL, // URL du frontend
+    credentials: true, // Autoriser les cookies et les headers avec credentials
   })
 );
 
-app.use(express.json()); // Parse JSON bodies
+// Middleware personnalisé pour valider l'origine
+app.use((req, res, next) => {
+  const allowedOrigins = [process.env.FRONTEND_URL];
+  const origin = req.headers.origin;
 
-/* ************************************************************************* */
+  if (origin && !allowedOrigins.includes(origin)) {
+    console.error(`Requête bloquée : origine non autorisée (${origin})`);
+    return res.status(403).send("Forbidden");
+  }
+  next();
+});
 
-const cookieParser = require("cookie-parser");
-app.use(cookieParser()); // Parse cookies
+// Middleware pour traiter JSON et cookies
+app.use(express.json());
+app.use(cookieParser());
 
-/* ************************************************************************* */
+// Routes API
+app.use("/api", router);
 
-const router = require("./router");
-app.use("/api", router); // All API routes are prefixed with /api
-
-/* ************************************************************************* */
-
-// Error handling middleware
-// Not done yet, but will be added later
-
+// Export de l'application
 module.exports = app;
