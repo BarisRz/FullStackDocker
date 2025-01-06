@@ -17,9 +17,11 @@ Before you begin, ensure you have the following installed:
 npm install
 ```
 
-2. Configure your .env (in /backend AND /fronted) by looking the sample to help you :
+2. Configure your .env (in /backend AND /frontend) by looking the sample to help you :
 
 ### Backend :
+
+.env :
 
 ```bash
 # Port for the backend server (Express)
@@ -31,6 +33,9 @@ DB_PORT=3306
 DB_USER=USER
 DB_PASSWORD=DB_PASSWORD
 DB_NAME=YourDBName
+
+# Frontend URL (for CORS configuration)
+FRONTEND_URL=http://localhost:5173
 ```
 
 For easy setup of a database, you can dump a set of data into the file `/backend/schema.sql` if you want to use fake data, the base schema is already set. To use them run, you can also run the same command to create a database with your own data :
