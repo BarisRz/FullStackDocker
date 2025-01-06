@@ -11,13 +11,13 @@ Before you begin, ensure you have the following installed:
 
 ## Getting Started
 
-1. Run the command :
+1. Clone the repo and run the command :
 
 ```bash
 npm install
 ```
 
-2. Clone this repo and dont FORGET to configure your .env (in /backend AND /fronted) by looking the sample to help you :
+2. Configure your .env (in /backend AND /fronted) by looking the sample to help you :
 
 ### Backend :
 
