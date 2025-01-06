@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 
 function App() {
   const [data, setData] = useState([]);
+
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/movies`).then((res) => {
       setData(res.data);
     });
   }, []);
+
   return (
     <>
       <div className="flex flex-col w-screen h-screen items-center justify-center">
