@@ -1,6 +1,3 @@
-CREATE DATABASE IF NOT EXISTS express_quests;
-USE express_quests;
-
 DROP TABLE IF EXISTS movies;
 
 CREATE TABLE movies (
