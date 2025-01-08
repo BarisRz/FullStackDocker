@@ -1,15 +1,12 @@
-const database = require("../../database/connection");
+const { userManager } = require("../managers");
 
-const getMovies = (req, res) => {
-  database
-    .query("select * from movies")
-    .then(([movies]) => {
-      res.json(movies); // use res.json instead of console.log
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
+const userReadAll = async (req, res) => {
+  try {
+    const users = await userManager.getAllUser();
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
-module.exports = { getMovies };
+module.exports = { userReadAll };

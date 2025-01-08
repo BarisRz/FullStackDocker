@@ -5,6 +5,6 @@ const router = express.Router();
 const movieControllers = require("./controllers/movieControllers");
 
 // API routes
-router.get("/movies", movieControllers.getMovies);
+router.get("/users", movieControllers.userReadAll);
 
 module.exports = router;
