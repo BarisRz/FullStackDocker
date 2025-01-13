@@ -1,8 +1,10 @@
 // Initiate all managers here to remove the need to import them in each controller file
 const UserManager = require("./models/UserManager");
+const TaskManager = require("./models/TaskManager");
 
 // Create an instance of each manager
 const userManager = new UserManager();
+const taskManager = new TaskManager();
 
 // Dont forget to export them all !
-module.exports = { userManager };
+module.exports = { userManager, taskManager };
