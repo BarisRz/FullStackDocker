@@ -1,113 +1,71 @@
+-- DROP previous tables if they exist to avoid conflicts
 DROP TABLE IF EXISTS movies;
-
-CREATE TABLE movies (
-  id int primary key NOT NULL AUTO_INCREMENT,
-  title varchar(255) NOT NULL,
-  director varchar(255) NOT NULL,
-  year varchar(255) NOT NULL,
-  color varchar(255) NOT NULL,
-  duration int NOT NULL
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb3;
-
-INSERT INTO
-  movies (title, director, year, color, duration)
-VALUES
-  (
-    'Citizen Kane',
-    'Orson Wells',
-    '1941',
-    '0',
-    120
-  ),
-  (
-    'The Godfather',
-    'Francis Ford Coppola',
-    '1972',
-    '1',
-    180
-  ),
-  (
-    'Pulp Fiction',
-    'Quentin Tarantino',
-    '1994',
-    '1',
-    180
-  ),
-  (
-    'Apocalypse Now',
-    'Francis Ford Coppola',
-    '1979',
-    '1',
-    150
-  ),
-  (
-    '2001 a space odyssey',
-    'Stanley Kubrick',
-    '1968',
-    '1',
-    160
-  ),
-  (
-    'The Dark Knight',
-    'Christopher Nolan',
-    '2008',
-    '1',
-    150
-  );
-
 DROP TABLE IF EXISTS users;
-
 CREATE TABLE users (
-    id int primary key NOT NULL AUTO_INCREMENT,
-    firstname varchar(255) NOT NULL,
-    lastname varchar(255) NOT NULL,
-    email varchar(255) UNIQUE NOT NULL,
-    city varchar(255) DEFAULT NULL,
-    language varchar(255) DEFAULT NULL
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    pseudo VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    role ENUM('user', 'admin') NOT NULL DEFAULT 'user',
+    email_verified BOOLEAN NOT NULL DEFAULT FALSE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
-INSERT INTO
-  users (firstname, lastname, email, city, language)
-VALUES
-  (
-    'John',
-    'Doe',
-    'john.doe@example.com',
-    'Paris',
-    'English'
-  ),
-  (
-    'Valeriy',
-    'Appius',
-    'valeriy.appius@example.com',
-    'Moscow',
-    'Russian'
-  ),
-  (
-    'Ralf',
-    'Geronimo',
-    'ralf.geronimo@example.com',
-    'New York',
-    'Italian'
-  ),
-  (
-    'Maria',
-    'Iskandar',
-    'maria.iskandar@example.com',
-    'New York',
-    'German'
-  ),
-  (
-    'Jane',
-    'Doe',
-    'jane.doe@example.com',
-    'London',
-    'English'
-  ),
-  (
-    'Johanna',
-    'Martino',
-    'johanna.martino@example.com',
-    'Milan',
-    'Spanish'
-  );
+DROP TABLE IF EXISTS password_reset;
+CREATE TABLE password_reset (
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    token VARCHAR(255) NOT NULL UNIQUE,
+    expiration_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS email_confirmation;
+CREATE TABLE email_confirmation (
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    token VARCHAR(255) NOT NULL UNIQUE,
+    expiration_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS category;
+CREATE TABLE category (
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+DROP TABLE IF EXISTS task_group;
+CREATE TABLE task_group (
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    is_public BOOLEAN NOT NULL DEFAULT FALSE,
+    creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+DROP TABLE IF EXISTS task;
+CREATE TABLE task (
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    content TEXT,
+    status ENUM('Todo', 'In progress', 'Done') NOT NULL DEFAULT 'Todo',
+    creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    expiration_date DATE,
+    task_group_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (task_group_id) REFERENCES task_group(id) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS user_comment;
+CREATE TABLE user_comment (
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    task_id INT NOT NULL,
+    content TEXT NOT NULL,
+    creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (task_id) REFERENCES task(id) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
