@@ -2,9 +2,24 @@ const express = require("express");
 const router = express.Router();
 
 // Import controllers
-const movieControllers = require("./controllers/movieControllers");
+const userControllers = require("./controllers/userControllers");
+
+// Midlewares
+const { inscription, hashPassword } = require("./middlewares/userInscription");
+const { sendMail, emailConfirmation } = require("./middlewares/mailling");
 
 // API routes
-router.get("/users", movieControllers.userReadAll);
+router.post(
+  "/inscription",
+  emailConfirmation,
+  sendMail,
+  inscription,
+  hashPassword,
+  userControllers.add
+); // pseudo, email, password in body
+
+router.get("/verify-email", userControllers.emailConfirmation); // Token in body
+
+router.get("/user/:id", userControllers.userById); // id in params
 
 module.exports = router;
