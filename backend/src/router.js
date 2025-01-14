@@ -20,4 +20,6 @@ router.post(
 
 router.get("/verify-email", userControllers.emailConfirmation); // Token in body
 
+router.get("/user/:id", userControllers.userById); // id in params
+
 module.exports = router;

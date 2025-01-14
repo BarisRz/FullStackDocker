@@ -44,5 +44,13 @@ class UserManager extends AbstractManager {
     }
     return 0;
   }
+
+  async readId(id) {
+    const [result] = await this.database.query(
+      `SELECT * FROM ${this.table} WHERE id = ?`,
+      [id]
+    );
+    return result;
+  }
 }
 module.exports = UserManager;
