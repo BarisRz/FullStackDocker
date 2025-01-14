@@ -15,8 +15,14 @@ class UserManager extends AbstractManager {
       `insert into ${this.table} (pseudo, email, password) values (?, ?, ?)`,
       [user.pseudo, user.email, user.password]
     );
+    return result.insertId;
+  }
 
-    console.log(typeof result.insertId);
+  async emailConfirmation(user) {
+    const [result] = await this.database.query(
+      `INSERT INTO email_confirmation (user_pseudo, token, expiration_date) VALUES (?, ?, DATE_ADD(NOW(), INTERVAL 15 MINUTE))`,
+      [user.pseudo, user.token]
+    );
     return result.insertId;
   }
 }

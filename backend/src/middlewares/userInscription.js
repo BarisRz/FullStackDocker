@@ -5,6 +5,7 @@ const userSchema = Joi.object({
   pseudo: Joi.string().min(3).max(30).alphanum().required(),
   email: Joi.string().email().required(),
   password: Joi.string().min(8).required(),
+  token: Joi.string().required(),
 });
 
 const inscription = async (req, res, next) => {
