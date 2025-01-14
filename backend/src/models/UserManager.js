@@ -25,5 +25,24 @@ class UserManager extends AbstractManager {
     );
     return result.insertId;
   }
+
+  async verifyEmail(token) {
+    const [result] = await this.database.query(
+      `SELECT * FROM email_confirmation WHERE token = ? AND expiration_date > NOW()`,
+      [token]
+    );
+    if (result.length > 0) {
+      const [update] = await this.database.query(
+        `UPDATE ${this.table} SET email_verified = 1 WHERE pseudo = ?`,
+        [result[0].user_pseudo]
+      );
+      const [deleteToken] = await this.database.query(
+        `DELETE FROM email_confirmation WHERE token = ?`,
+        [token]
+      );
+      return result[0].user_pseudo;
+    }
+    return 0;
+  }
 }
 module.exports = UserManager;

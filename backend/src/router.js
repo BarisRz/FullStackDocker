@@ -16,8 +16,8 @@ router.post(
   inscription,
   hashPassword,
   userControllers.add
-);
+); // pseudo, email, password in body
 
-router;
+router.get("/verify-email", userControllers.emailConfirmation); // Token in body
 
 module.exports = router;
