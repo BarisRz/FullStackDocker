@@ -1,4 +1,5 @@
 const { userManager } = require("../managers");
+const jwt = require("jsonwebtoken");
 
 const add = async (req, res) => {
   const user = req.body;
@@ -58,10 +59,27 @@ const userById = async (req, res) => {
   }
 };
 
+const login = async (req, res) => {
+  try {
+    const user = req.user;
+    const LorgaToken = jwt.sign({ user }, process.env.APP_SECRET, {
+      expiresIn: "10d",
+    });
+    res.cookie("LorgaToken", LorgaToken, {
+      httpOnly: true,
+      maxAge: 10 * 24 * 60 * 60 * 1000,
+    });
+    res.json({ user });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 module.exports = {
   add,
   emailConfirmation,
   userById,
   passwordResetRequest,
   passwordReseting,
+  login,
 };

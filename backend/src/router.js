@@ -12,6 +12,7 @@ const {
   tokenGeneration,
   sendMailPasswordReset,
 } = require("./middlewares/mailling");
+const { verifyPassword } = require("./middlewares/jwtToken");
 
 // API routes
 router.post(
@@ -36,5 +37,6 @@ router.get(
 ); // email in body
 
 router.post("/password-reset", hashPassword, userControllers.passwordReseting); // token in body, and new password in body
+router.post("/login", verifyPassword, userControllers.login); // pseudo, password in body
 
 module.exports = router;

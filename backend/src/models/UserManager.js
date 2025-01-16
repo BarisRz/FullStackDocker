@@ -87,5 +87,12 @@ class UserManager extends AbstractManager {
     );
     return result;
   }
+  async read(pseudo) {
+    const [result] = await this.database.query(
+      `SELECT * FROM ${this.table} WHERE pseudo = ?`,
+      [pseudo]
+    );
+    return result;
+  }
 }
 module.exports = UserManager;
