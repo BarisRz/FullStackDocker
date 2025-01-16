@@ -8,14 +8,10 @@ const app = express();
 // Middleware CORS
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (origin === process.env.FRONTEND_URL) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true, // Autoriser les cookies et les headers avec credentials
+    origin: [
+      process.env.FRONTEND_URL, // keep this one, after checking the value in `backend/.env`
+    ],
+    credentials: true,
   })
 );
 

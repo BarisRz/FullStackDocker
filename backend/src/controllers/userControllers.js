@@ -24,6 +24,29 @@ const emailConfirmation = async (req, res) => {
   }
 };
 
+const passwordReseting = async (req, res) => {
+  const user = req.body;
+  try {
+    const result = await userManager.verifyPasswordToken(user);
+    if (result === 0) {
+      res.status(404).json({ error: "Token not found or expired" });
+    }
+    res.status(201).json({ message: `Password reset for ${result}` });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const passwordResetRequest = async (req, res) => {
+  const user = req.body;
+  try {
+    const insertedId = await userManager.forgottenPassword(user);
+    res.status(201).json({ id: insertedId });
+  } catch (error) {
+    res.status(409).json({ error: error.message });
+  }
+};
+
 const userById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -35,4 +58,10 @@ const userById = async (req, res) => {
   }
 };
 
-module.exports = { add, emailConfirmation, userById };
+module.exports = {
+  add,
+  emailConfirmation,
+  userById,
+  passwordResetRequest,
+  passwordReseting,
+};
