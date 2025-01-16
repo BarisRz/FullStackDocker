@@ -58,7 +58,18 @@ class UserManager extends AbstractManager {
       `SELECT * FROM password_reset WHERE token = ? AND expiration_date > NOW()`,
       [user.token]
     );
-    return result;
+    if (result.length > 0) {
+      const [update] = await this.database.query(
+        `UPDATE ${this.table} SET password = ? WHERE email = ?`,
+        [user.password, result[0].email]
+      );
+      const [deleteToken] = await this.database.query(
+        `DELETE FROM password_reset WHERE token = ?`,
+        [user.token]
+      );
+      return result[0].email;
+    }
+    return 0;
   }
 
   async updatePassword(user) {

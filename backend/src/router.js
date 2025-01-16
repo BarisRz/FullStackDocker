@@ -16,6 +16,7 @@ const {
 // API routes
 router.post(
   "/inscription",
+  tokenGeneration,
   emailConfirmation,
   sendMail,
   inscription,
@@ -27,11 +28,13 @@ router.get("/verify-email", userControllers.emailConfirmation); // Token in body
 
 router.get("/user/:id", userControllers.userById); // id in params
 
-router.post(
+router.get(
   "/password-reset",
   tokenGeneration,
   sendMailPasswordReset,
   userControllers.passwordResetRequest
 ); // email in body
+
+router.post("/password-reset", hashPassword, userControllers.passwordReseting); // token in body, and new password in body
 
 module.exports = router;

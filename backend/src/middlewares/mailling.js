@@ -57,8 +57,6 @@ const sendMailPasswordReset = async (req, res, next) => {
 };
 
 const emailConfirmation = async (req, res, next) => {
-  const token = generateToken();
-  req.body.token = token;
   try {
     await userManager.emailConfirmation(req.body);
     next();
