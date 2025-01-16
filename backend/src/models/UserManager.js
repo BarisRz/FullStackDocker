@@ -45,6 +45,30 @@ class UserManager extends AbstractManager {
     return 0;
   }
 
+  async forgottenPassword(user) {
+    const [result] = await this.database.query(
+      `INSERT INTO password_reset (email, token, expiration_date) VALUES (?, ?, DATE_ADD(NOW(), INTERVAL 15 MINUTE))`,
+      [user.email, user.token]
+    );
+    return result.insertId;
+  }
+
+  async verifyPasswordToken(user) {
+    const [result] = await this.database.query(
+      `SELECT * FROM password_reset WHERE token = ? AND expiration_date > NOW()`,
+      [user.token]
+    );
+    return result;
+  }
+
+  async updatePassword(user) {
+    const [result] = await this.database.query(
+      `UPDATE users SET password = ? WHERE email = ?`,
+      [user.password, user.email]
+    );
+    return result.affectedRows;
+  }
+
   async readId(id) {
     const [result] = await this.database.query(
       `SELECT * FROM ${this.table} WHERE id = ?`,

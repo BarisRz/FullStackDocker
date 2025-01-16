@@ -35,4 +35,14 @@ const userById = async (req, res) => {
   }
 };
 
-module.exports = { add, emailConfirmation, userById };
+const passwordResetRequest = async (req, res) => {
+  const user = req.body;
+  try {
+    const insertedId = await userManager.forgottenPassword(user);
+    res.status(201).json({ id: insertedId });
+  } catch (error) {
+    res.status(409).json({ error: error.message });
+  }
+};
+
+module.exports = { add, emailConfirmation, userById, passwordResetRequest };
