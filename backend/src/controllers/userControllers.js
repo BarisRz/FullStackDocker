@@ -53,7 +53,7 @@ const userById = async (req, res) => {
   try {
     const user = await userManager.readId(id);
     delete user[0].password;
-    res.status(200).json(user);
+    res.status(200).json(user[0]);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -62,14 +62,51 @@ const userById = async (req, res) => {
 const login = async (req, res) => {
   try {
     const user = req.user;
-    const LorgaToken = jwt.sign({ user }, process.env.APP_SECRET, {
-      expiresIn: "10d",
+    const accessToken = jwt.sign({ user }, process.env.ACCESS_APP_SECRET, {
+      expiresIn: "15m",
     });
-    res.cookie("LorgaToken", LorgaToken, {
+    const refreshToken = jwt.sign({ user }, process.env.APP_SECRET, {
+      expiresIn: "7d",
+    });
+    const insertId = await userManager.createRefreshToken(
+      user.id,
+      refreshToken
+    );
+    res.cookie("refreshTokenLorga", refreshToken, {
       httpOnly: true,
-      maxAge: 10 * 24 * 60 * 60 * 1000,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    res.json({ user });
+    res.json({ user, accessToken, insertId });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+const handleRefreshToken = (req, res) => {
+  const { refreshTokenLorga } = req.cookies;
+  if (!refreshTokenLorga) {
+    return res.status(401).send("No token");
+  }
+  try {
+    jwt.verify(
+      refreshTokenLorga,
+      process.env.APP_SECRET,
+      async (err, decoded) => {
+        const { user } = decoded;
+        const foundUser = await userManager.verifyRefreshToken(
+          refreshTokenLorga,
+          user.id
+        );
+        if (err || foundUser[0].user_id !== user.id) {
+          return res.status(403).send("Invalid token");
+        }
+        const accessToken = jwt.sign({ user }, process.env.ACCESS_APP_SECRET, {
+          expiresIn: "15m",
+        });
+        res.json({ user, accessToken });
+      }
+    );
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -82,4 +119,5 @@ module.exports = {
   passwordResetRequest,
   passwordReseting,
   login,
+  handleRefreshToken,
 };

@@ -94,5 +94,22 @@ class UserManager extends AbstractManager {
     );
     return result;
   }
+
+  async createRefreshToken(id, token) {
+    const [result] = await this.database.query(
+      `INSERT INTO refresh_token (user_id, token, expiration_date) VALUES (?, ?, DATE_ADD(NOW(), INTERVAL 7 DAY))`,
+      [id, token]
+    );
+    return result.insertId;
+  }
+
+  async verifyRefreshToken(token, id) {
+    const [result] = await this.database.query(
+      `SELECT * FROM refresh_token WHERE token = ? AND expiration_date > NOW() AND user_id = ?`,
+      [token, id]
+    );
+    return result;
+  }
 }
+
 module.exports = UserManager;

@@ -12,7 +12,7 @@ const {
   tokenGeneration,
   sendMailPasswordReset,
 } = require("./middlewares/mailling");
-const { verifyPassword } = require("./middlewares/jwtToken");
+const { verifyPassword, verifyToken } = require("./middlewares/jwtToken");
 
 // API routes
 router.post(
@@ -38,5 +38,13 @@ router.get(
 
 router.post("/password-reset", hashPassword, userControllers.passwordReseting); // token in body, and new password in body
 router.post("/login", verifyPassword, userControllers.login); // pseudo, password in body
+router.get("/refresh", userControllers.handleRefreshToken);
+// router.get("/test", verifyToken, (req, res) => {
+//   res.status(200).send("Route Test");
+// });
+
+// Protected route
+// router.use(verifyToken);
+// router.get("/protected-route" /*, userControllers.protectedRoute*/);
 
 module.exports = router;
