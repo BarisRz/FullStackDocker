@@ -38,13 +38,13 @@ router.get(
 
 router.post("/password-reset", hashPassword, userControllers.passwordReseting); // token in body, and new password in body
 router.post("/login", verifyPassword, userControllers.login); // pseudo, password in body
+router.get("/logout", userControllers.logout);
 router.get("/refresh", userControllers.handleRefreshToken);
-// router.get("/test", verifyToken, (req, res) => {
-//   res.status(200).send("Route Test");
-// });
 
 // Protected route
-// router.use(verifyToken);
-// router.get("/protected-route" /*, userControllers.protectedRoute*/);
+router.use(verifyToken);
+router.get("/test", (req, res) => {
+  res.sendStatus(200);
+});
 
 module.exports = router;

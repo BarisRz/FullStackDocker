@@ -1,5 +1,4 @@
 -- DROP previous tables if they exist to avoid conflicts
-DROP TABLE IF EXISTS movies;
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -74,3 +73,22 @@ CREATE TABLE user_comment (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (task_id) REFERENCES task(id) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
+SET GLOBAL event_scheduler = ON;
+CREATE EVENT IF NOT EXISTS clean_expired_records
+ON SCHEDULE EVERY 1 DAY
+STARTS CURRENT_TIMESTAMP
+DO
+BEGIN
+    -- Supprimer les tokens expirés de la table refresh_token
+    DELETE FROM refresh_token
+    WHERE expiration_date < NOW();
+
+    -- Supprimer les tokens expirés de la table password_reset
+    DELETE FROM password_reset
+    WHERE expiration_date < NOW();
+
+    -- Supprimer les tokens expirés de la table email_confirmation
+    DELETE FROM email_confirmation
+    WHERE expiration_date < NOW();
+END;

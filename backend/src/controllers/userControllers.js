@@ -112,6 +112,17 @@ const handleRefreshToken = (req, res) => {
   }
 };
 
+const logout = async (req, res) => {
+  // Dont forget TO ERASE the access token from the frontend
+  const cookies = req.cookies.refreshTokenLorga;
+  if (cookies) {
+    await userManager.deleteRefreshToken(cookies);
+    res.clearCookie("refreshTokenLorga");
+    return res.sendStatus(200);
+  }
+  res.sendStatus(204);
+};
+
 module.exports = {
   add,
   emailConfirmation,
@@ -120,4 +131,5 @@ module.exports = {
   passwordReseting,
   login,
   handleRefreshToken,
+  logout,
 };

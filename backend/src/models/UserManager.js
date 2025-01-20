@@ -110,6 +110,14 @@ class UserManager extends AbstractManager {
     );
     return result;
   }
+
+  async deleteRefreshToken(token) {
+    const [result] = await this.database.query(
+      `DELETE FROM refresh_token WHERE token = ?`,
+      [token]
+    );
+    return result.affectedRows;
+  }
 }
 
 module.exports = UserManager;
