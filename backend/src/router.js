@@ -4,6 +4,7 @@ const router = express.Router();
 // Import controllers
 const userControllers = require("./controllers/userControllers");
 const taskControllers = require("./controllers/taskControllers");
+const categoryControllers = require("./controllers/categoryControllers");
 
 // Midlewares
 const { inscription, hashPassword } = require("./middlewares/userInscription");
@@ -41,9 +42,6 @@ router.get("/refresh", userControllers.handleRefreshToken);
 
 // Protected route
 router.use(verifyToken);
-router.get("/test", (req, res) => {
-  res.sendStatus(200);
-});
 
 // User route
 router.put("/user/password", hashPassword, userControllers.changePassword); // password in body
@@ -61,5 +59,8 @@ router.post("/task", taskControllers.addTask);
 router.get("/task/:id", taskControllers.findTask);
 router.get("/task-all/:group_id", taskControllers.findAllTaskFromGroup);
 router.put("/task/:id", taskControllers.updateTask);
+
+// Category route
+router.put("/category", categoryControllers.create);
 
 module.exports = router;

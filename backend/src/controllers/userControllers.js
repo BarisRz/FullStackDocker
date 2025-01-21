@@ -65,10 +65,10 @@ const userById = async (req, res) => {
 const login = async (req, res) => {
   try {
     const user = req.user;
-    const accessToken = jwt.sign({ user }, process.env.ACCESS_APP_SECRET, {
-      expiresIn: "15m",
+    const accessToken = jwt.sign(user, process.env.ACCESS_APP_SECRET, {
+      expiresIn: "15m", // DONT FORGERT TO CHANGE THIS TO 15MIN FOR PROD !!!
     });
-    const refreshToken = jwt.sign({ user }, process.env.APP_SECRET, {
+    const refreshToken = jwt.sign(user, process.env.APP_SECRET, {
       expiresIn: "7d",
     });
     const insertId = await userManager.createRefreshToken(
@@ -96,18 +96,22 @@ const handleRefreshToken = (req, res) => {
       refreshTokenLorga,
       process.env.APP_SECRET,
       async (err, decoded) => {
-        const { user } = decoded;
-        const foundUser = await userManager.verifyRefreshToken(
-          refreshTokenLorga,
-          user.id
-        );
-        if (err || foundUser[0].user_id !== user.id) {
+        if (err) {
           return res.status(403).send("Invalid token");
         }
-        const accessToken = jwt.sign({ user }, process.env.ACCESS_APP_SECRET, {
-          expiresIn: "15h", // DONT FORGERT TO CHANGE THIS TO 15MIN FOR PROD !!!
+        const foundUser = await userManager.verifyRefreshToken(
+          refreshTokenLorga,
+          decoded.id
+        );
+        if (!foundUser || foundUser[0].user_id !== decoded.id) {
+          return res.status(403).send("Invalid token");
+        }
+        // Supprimer la propriété exp du payload
+        delete decoded.exp;
+        const accessToken = jwt.sign(decoded, process.env.ACCESS_APP_SECRET, {
+          expiresIn: "15m", // Change to 15 minutes for production
         });
-        res.json({ user, accessToken });
+        res.json({ user: decoded, accessToken });
       }
     );
   } catch (err) {

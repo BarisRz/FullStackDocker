@@ -13,7 +13,7 @@ const verifyPassword = async (req, res, next) => {
 
     if (await argon2.verify(utilisateur.password, req.body.password)) {
       delete utilisateur.password;
-      req.user = utilisateur;
+      req.user = { ...utilisateur }; // Assigner directement les propriétés de l'utilisateur à req.user
       next();
     } else {
       return res
@@ -39,7 +39,7 @@ const verifyToken = (req, res, next) => {
     if (err) {
       return res.status(403).send("Invalid token");
     }
-    req.user = user;
+    req.user = { ...user };
     next();
   });
 };
