@@ -52,6 +52,9 @@ const userById = async (req, res) => {
   const { id } = req.params;
   try {
     const user = await userManager.readId(id);
+    if (user.length === 0) {
+      return res.sendStatus(404);
+    }
     delete user[0].password;
     res.status(200).json(user[0]);
   } catch (error) {
@@ -102,7 +105,7 @@ const handleRefreshToken = (req, res) => {
           return res.status(403).send("Invalid token");
         }
         const accessToken = jwt.sign({ user }, process.env.ACCESS_APP_SECRET, {
-          expiresIn: "15m",
+          expiresIn: "15h", // DONT FORGERT TO CHANGE THIS TO 15MIN FOR PROD !!!
         });
         res.json({ user, accessToken });
       }
@@ -123,6 +126,16 @@ const logout = async (req, res) => {
   res.sendStatus(204);
 };
 
+const changePassword = async (req, res) => {
+  const user = req.body;
+  try {
+    const result = await userManager.updatePassword(user);
+    res.status(201).json({ updated: result });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   add,
   emailConfirmation,
@@ -132,4 +145,5 @@ module.exports = {
   login,
   handleRefreshToken,
   logout,
+  changePassword,
 };
