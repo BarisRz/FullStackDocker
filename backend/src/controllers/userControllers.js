@@ -106,11 +106,14 @@ const handleRefreshToken = (req, res) => {
         if (!foundUser || foundUser[0].user_id !== decoded.id) {
           return res.status(403).send("Invalid token");
         }
-        // Supprimer la propriété exp du payload
+        // Générer un nouveau accessToken
         delete decoded.exp;
-        const accessToken = jwt.sign(decoded, process.env.ACCESS_APP_SECRET, {
-          expiresIn: "15m", // Change to 15 minutes for production
-        });
+        delete decoded.iat;
+        const accessToken = jwt.sign(
+          decoded,
+          process.env.ACCESS_APP_SECRET,
+          { expiresIn: "15m" } // Change to 15 minutes for production
+        );
         res.json({ user: decoded, accessToken });
       }
     );
