@@ -51,7 +51,7 @@ router.get("/user/:id", userControllers.userById); // id in params
 router.post("/task-group", taskControllers.add);
 router.get("/task-group/:id", taskControllers.read);
 router.delete("/task-group/:id", taskControllers.deleteGroup);
-router.get("/task-group-all/:id", taskControllers.browse);
+router.get("/task-group-all/", taskControllers.browse);
 router.put("/task-group/:id", taskControllers.updateTaskGroup);
 
 // Task route
@@ -61,6 +61,6 @@ router.get("/task-all/:group_id", taskControllers.findAllTaskFromGroup);
 router.put("/task/:id", taskControllers.updateTask);
 
 // Category route
-router.put("/category", categoryControllers.create);
+router.post("/category", categoryControllers.create);
 
 module.exports = router;

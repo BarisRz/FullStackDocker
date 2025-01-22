@@ -72,10 +72,10 @@ class UserManager extends AbstractManager {
     return 0;
   }
 
-  async updatePassword(user) {
+  async updatePassword(user, id) {
     const [result] = await this.database.query(
-      `UPDATE users SET password = ? WHERE email = ?`,
-      [user.password, user.email]
+      `UPDATE ${this.table} SET password = ? WHERE email = ? AND id = ?`,
+      [user.password, user.email, id]
     );
     return result.affectedRows;
   }
@@ -87,6 +87,7 @@ class UserManager extends AbstractManager {
     );
     return result;
   }
+
   async read(pseudo) {
     const [result] = await this.database.query(
       `SELECT * FROM ${this.table} WHERE pseudo = ?`,

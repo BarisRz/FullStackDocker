@@ -2,8 +2,9 @@ const { taskManager } = require("../managers");
 
 const add = async (req, res) => {
   const taskGroup = req.body;
+  const { id } = req.user;
   try {
-    const insertId = await taskManager.create(taskGroup);
+    const insertId = await taskManager.create(id, taskGroup);
     res.status(201).json({ insertId });
   } catch (error) {
     res.status(409).json({ error: error.message });
@@ -12,8 +13,9 @@ const add = async (req, res) => {
 
 const read = async (req, res) => {
   const { id } = req.params;
+  const user_id = req.user.id;
   try {
-    const group = await taskManager.read(id);
+    const group = await taskManager.read(id, user_id);
     if (group.length === 0) {
       return res.sendStatus(404);
     }
@@ -24,7 +26,7 @@ const read = async (req, res) => {
 };
 
 const browse = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.user;
   try {
     const tasks_group = await taskManager.readAll(id);
     if (tasks_group.length === 0) {
@@ -38,8 +40,9 @@ const browse = async (req, res) => {
 
 const deleteGroup = async (req, res) => {
   const { id } = req.params;
+  const user_id = req.user.id;
   try {
-    const result = await taskManager.deleteTaskGroup(id);
+    const result = await taskManager.deleteTaskGroup(id, user_id);
     if (result === 0) {
       return res.sendStatus(404);
     }
@@ -53,8 +56,9 @@ const deleteGroup = async (req, res) => {
 
 const addTask = async (req, res) => {
   const task = req.body;
+  const { id } = req.user;
   try {
-    const result = await taskManager.createTask(task);
+    const result = await taskManager.createTask(id, task);
     res.status(200).json({ insertId: result });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -63,8 +67,9 @@ const addTask = async (req, res) => {
 
 const findTask = async (req, res) => {
   const { id } = req.params;
+  const user_id = req.user.id;
   try {
-    const result = await taskManager.readTask(id);
+    const result = await taskManager.readTask(id, user_id);
     if (result.length === 0) {
       return res.sendStatus(404);
     }
@@ -76,8 +81,9 @@ const findTask = async (req, res) => {
 
 const findAllTaskFromGroup = async (req, res) => {
   const { group_id } = req.params;
+  const { id } = req.user;
   try {
-    const result = await taskManager.readAllTaskFromGroup(group_id);
+    const result = await taskManager.readAllTaskFromGroup(group_id, id);
     if (result.length === 0) {
       return res.sendStatus(404);
     }
@@ -89,9 +95,10 @@ const findAllTaskFromGroup = async (req, res) => {
 
 const updateTaskGroup = async (req, res) => {
   const { id } = req.params;
+  const user_id = req.user.id;
   const body = req.body;
   try {
-    const result = await taskManager.updateTaskGroup(id, body);
+    const result = await taskManager.updateTaskGroup(id, body, user_id);
     res.status(201).json({ updated: result });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -100,9 +107,10 @@ const updateTaskGroup = async (req, res) => {
 
 const updateTask = async (req, res) => {
   const { id } = req.params;
+  const user_id = req.user.id;
   const body = req.body;
   try {
-    const result = await taskManager.updateTask(id, body);
+    const result = await taskManager.updateTask(id, body, user_id);
     res.status(201).json({ updated: result });
   } catch (error) {
     res.status(500).json({ error: error.message });

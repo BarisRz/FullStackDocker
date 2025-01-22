@@ -135,8 +135,9 @@ const logout = async (req, res) => {
 
 const changePassword = async (req, res) => {
   const user = req.body;
+  const { id } = req.user;
   try {
-    const result = await userManager.updatePassword(user);
+    const result = await userManager.updatePassword(user, id);
     res.status(201).json({ updated: result });
   } catch (error) {
     res.status(500).json({ error: error.message });

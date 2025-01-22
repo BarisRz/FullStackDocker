@@ -12,43 +12,43 @@ class TaskManager extends AbstractManager {
     return list;
   }
 
-  async read(id) {
+  async read(id, user_id) {
     const [task_group] = await this.database.query(
-      `SELECT * FROM task_group WHERE id = ?`,
-      [id]
+      `SELECT * FROM task_group WHERE id = ? and user_id = ?`,
+      [id, user_id]
     );
     return task_group;
   }
 
-  async create(body) {
+  async create(id, body) {
     const [result] = await this.database.query(
       `INSERT INTO task_group (user_id, name, is_public) VALUES (?,?,?)`,
-      [body.id, body.name, body.is_public]
+      [id, body.name, body.is_public]
     );
     return result.insertId;
   }
 
-  async updateTaskGroup(id, body) {
+  async updateTaskGroup(id, body, user_id) {
     const [result] = await this.database.query(
-      `UPDATE task_group SET name = ?, is_public = ? WHERE id = ?`,
-      [body.name, body.is_public, id]
+      `UPDATE task_group SET name = ?, is_public = ? WHERE id = ? AND user_id = ?`,
+      [body.name, body.is_public, id, user_id]
     );
     return result.affectedRows;
   }
 
-  async deleteTaskGroup(id) {
+  async deleteTaskGroup(id, user_id) {
     const [result] = await this.database.query(
-      `DELETE FROM task_group WHERE id = ?`,
-      [id]
+      `DELETE FROM task_group WHERE id = ? and user_id = ?`,
+      [id, user_id]
     );
     return result.affectedRows;
   }
 
-  async createTask(task) {
+  async createTask(id, task) {
     const [result] = await this.database.query(
       `INSERT INTO ${this.table} (user_id, title, content, status, expiration_date, task_group_id) VALUES (?,?,?,?,?,?)`,
       [
-        task.user_id,
+        id,
         task.title,
         task.content,
         task.status,
@@ -59,26 +59,26 @@ class TaskManager extends AbstractManager {
     return result.insertId;
   }
 
-  async readTask(id) {
+  async readTask(id, user_id) {
     const [result] = await this.database.query(
-      `SELECT * FROM ${this.table} WHERE id = ?`,
-      [id]
+      `SELECT * FROM ${this.table} WHERE id = ? and user_id = ?`,
+      [id, user_id]
     );
     return result;
   }
 
-  async readAllTaskFromGroup(group_id) {
+  async readAllTaskFromGroup(group_id, id) {
     const [result] = await this.database.query(
-      `SELECT * FROM ${this.table} WHERE task_group_id = ?`,
-      [group_id]
+      `SELECT * FROM ${this.table} WHERE task_group_id = ? AND user_id = ?`,
+      [group_id, id]
     );
     return result;
   }
 
-  async updateTask(id, body) {
+  async updateTask(id, body, user_id) {
     const [result] = await this.database.query(
-      `UPDATE ${this.table} SET title = ?, content = ?, status = ?, expiration_date = ? WHERE id = ?`,
-      [body.title, body.content, body.status, body.expiration_date, id]
+      `UPDATE ${this.table} SET title = ?, content = ?, status = ?, expiration_date = ? WHERE id = ? AND user_id = ?`,
+      [body.title, body.content, body.status, body.expiration_date, id, user_id]
     );
     return result.affectedRows;
   }
