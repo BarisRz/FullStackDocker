@@ -13,4 +13,53 @@ const create = async (req, res) => {
   }
 };
 
-module.exports = { create };
+const readAll = async (req, res) => {
+  const { id } = req.user;
+  try {
+    const result = await categoryManager.browse(id);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const read = async (req, res) => {
+  const { id } = req.user;
+  try {
+    const [result] = await categoryManager.read(req.params.id, id);
+    if (!result) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const update = async (req, res) => {
+  const { id } = req.user;
+  try {
+    const result = await categoryManager.edit(req.params.id, req.body.name, id);
+    if (!result) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+    res.status(200).json({ message: "Category updated" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const deleteCategory = async (req, res) => {
+  const { id } = req.user;
+  try {
+    const result = await categoryManager.delete(req.params.id, id);
+    if (!result) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+    res.status(200).json({ message: "Category deleted" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { create, readAll, read, update, deleteCategory };

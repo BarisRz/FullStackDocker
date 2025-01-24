@@ -117,6 +117,20 @@ const updateTask = async (req, res) => {
   }
 };
 
+const deleteTask = async (req, res) => {
+  const { id } = req.params;
+  const user_id = req.user.id;
+  try {
+    const result = await taskManager.deleteTask(id, user_id);
+    if (!result) {
+      return res.sendStatus(404);
+    }
+    res.status(201).json({ deleted: result });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   add,
   read,
@@ -127,4 +141,5 @@ module.exports = {
   findAllTaskFromGroup,
   updateTaskGroup,
   updateTask,
+  deleteTask,
 };

@@ -82,6 +82,14 @@ class TaskManager extends AbstractManager {
     );
     return result.affectedRows;
   }
+
+  async deleteTask(id, user_id) {
+    const [result] = await this.database.query(
+      `DELETE FROM ${this.table} WHERE id = ? AND user_id = ?`,
+      [id, user_id]
+    );
+    return result.affectedRows;
+  }
 }
 
 module.exports = TaskManager;
