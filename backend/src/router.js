@@ -6,6 +6,7 @@ const userControllers = require("./controllers/userControllers");
 const taskControllers = require("./controllers/taskControllers");
 const categoryControllers = require("./controllers/categoryControllers");
 const commentControllers = require("./controllers/commentControllers");
+const adminControllers = require("./controllers/adminControllers");
 
 // Midlewares
 const { inscription, hashPassword } = require("./middlewares/userInscription");
@@ -81,5 +82,7 @@ router.put("/comment/:comment_id/:task_id", commentControllers.update);
 router.delete("/comment/:comment_id/:task_id", commentControllers.remove);
 
 router.use(verifyAdmin);
+router.get("/admin/user", adminControllers.getAllUser); // page and limit in query like /admin/user?page=1&limit=10
+router.delete("/admin/user/:id", adminControllers.deleteUser); // id of user in params
 
 module.exports = router;
