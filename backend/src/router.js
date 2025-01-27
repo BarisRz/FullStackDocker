@@ -5,10 +5,15 @@ const router = express.Router();
 const userControllers = require("./controllers/userControllers");
 const taskControllers = require("./controllers/taskControllers");
 const categoryControllers = require("./controllers/categoryControllers");
+const commentControllers = require("./controllers/commentControllers");
 
 // Midlewares
 const { inscription, hashPassword } = require("./middlewares/userInscription");
-const { verifyPassword, verifyToken } = require("./middlewares/jwtToken");
+const {
+  verifyPassword,
+  verifyToken,
+  verifyAdmin,
+} = require("./middlewares/jwtToken");
 const {
   sendMail,
   emailConfirmation,
@@ -46,6 +51,7 @@ router.use(verifyToken);
 // User route
 router.put("/user/password", hashPassword, userControllers.changePassword); // password in body
 router.get("/user/:id", userControllers.userById); // id in params
+router.delete("/user", userControllers.deleteUser);
 
 // Task group route
 router.post("/task-group", taskControllers.add);
@@ -55,11 +61,11 @@ router.delete("/task-group/:id", taskControllers.deleteGroup);
 router.put("/task-group/:id", taskControllers.updateTaskGroup);
 
 // Task route
-router.post("/task", taskControllers.addTask);
-router.get("/task/:id", taskControllers.findTask);
-router.get("/task-all/:group_id", taskControllers.findAllTaskFromGroup);
-router.put("/task/:id", taskControllers.updateTask);
-router.delete("/task/:id", taskControllers.deleteTask);
+router.post("/task", taskControllers.addTask); // title, status, task_group_id in body
+router.get("/task/:id", taskControllers.findTask); // id in params
+router.get("/task-all/:group_id", taskControllers.findAllTaskFromGroup); // group_id in params
+router.put("/task/:id", taskControllers.updateTask); // id in params, title, content?, expiration date?, status in body
+router.delete("/task/:id", taskControllers.deleteTask); // id in params
 
 // Category route
 router.post("/category", categoryControllers.create);
@@ -67,5 +73,13 @@ router.get("/category", categoryControllers.readAll);
 router.get("/category/:id", categoryControllers.read);
 router.put("/category/:id", categoryControllers.update);
 router.delete("/category/:id", categoryControllers.deleteCategory);
+
+// Comment route
+router.post("/comment/:id", commentControllers.create);
+router.get("/comment/:id", commentControllers.readAll);
+router.put("/comment/:comment_id/:task_id", commentControllers.update);
+router.delete("/comment/:comment_id/:task_id", commentControllers.remove);
+
+router.use(verifyAdmin);
 
 module.exports = router;

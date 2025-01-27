@@ -103,6 +103,10 @@ const handleRefreshToken = (req, res) => {
           refreshTokenLorga,
           decoded.id
         );
+        if (foundUser.length === 0) {
+          res.clearCookie("refreshTokenLorga");
+          return res.status(403).send("User not found");
+        }
         if (!foundUser || foundUser[0].user_id !== decoded.id) {
           return res.status(403).send("Invalid token");
         }
@@ -144,6 +148,19 @@ const changePassword = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  const { id } = req.user;
+  try {
+    const result = await userManager.deleteUser(id);
+    if (result === 0) {
+      return res.sendStatus(404);
+    }
+    res.sendStatus(200);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   add,
   emailConfirmation,
@@ -154,4 +171,5 @@ module.exports = {
   handleRefreshToken,
   logout,
   changePassword,
+  deleteUser,
 };

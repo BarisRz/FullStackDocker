@@ -119,6 +119,14 @@ class UserManager extends AbstractManager {
     );
     return result.affectedRows;
   }
+
+  async deleteUser(user_id) {
+    const [result] = await this.database.query(
+      `DELETE FROM ${this.table} WHERE id = ?`,
+      [user_id]
+    );
+    return result.affectedRows;
+  }
 }
 
 module.exports = UserManager;

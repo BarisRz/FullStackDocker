@@ -44,4 +44,11 @@ const verifyToken = (req, res, next) => {
   });
 };
 
-module.exports = { verifyPassword, verifyToken };
+const verifyAdmin = (req, res, next) => {
+  if (req.user.role !== "admin") {
+    return res.status(403).send("You are not allowed to access this resource");
+  }
+  next();
+};
+
+module.exports = { verifyPassword, verifyToken, verifyAdmin };
