@@ -81,6 +81,7 @@ router.get("/comment/:id", commentControllers.readAll);
 router.put("/comment/:comment_id/:task_id", commentControllers.update);
 router.delete("/comment/:comment_id/:task_id", commentControllers.remove);
 
+// Admin route
 router.use(verifyAdmin);
 router.get("/admin/user", adminControllers.getAllUser); // page and limit in query like /admin/user?page=1&limit=10
 router.delete("/admin/user/:id", adminControllers.deleteUser); // id of user in params
