@@ -1,10 +1,7 @@
-import React from "react";
-import { Box, Container, Typography, Button } from "@mui/material";
-
 function App() {
   return (
     <>
-      <Navbar />
+      <h1 className="text-red-600">Texte en rouge</h1>
     </>
   );
 }
