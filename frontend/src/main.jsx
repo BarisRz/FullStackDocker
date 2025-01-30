@@ -12,6 +12,7 @@ import { AccessTokenProvider } from "./contexts/AccessTokenContext.jsx";
 import App from "./pages/App.jsx";
 import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
+import SignIn from "./pages/SignIn.jsx";
 
 const router = createBrowserRouter([
   {
@@ -25,18 +26,20 @@ const router = createBrowserRouter([
         path: "/about",
         element: <About />,
       },
+      {
+        path: "/signin",
+        element: <SignIn />,
+      },
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <ThemeProvider>
-      <AccessTokenProvider>
-        <UserProvider>
-          <RouterProvider router={router} />
-        </UserProvider>
-      </AccessTokenProvider>
-    </ThemeProvider>
-  </React.StrictMode>
+  <ThemeProvider>
+    <AccessTokenProvider>
+      <UserProvider>
+        <RouterProvider router={router} />
+      </UserProvider>
+    </AccessTokenProvider>
+  </ThemeProvider>
 );

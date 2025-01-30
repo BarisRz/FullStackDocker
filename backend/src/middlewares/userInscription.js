@@ -2,7 +2,7 @@ const Joi = require("joi");
 const argon2 = require("argon2");
 
 const userSchema = Joi.object({
-  pseudo: Joi.string().min(3).max(30).alphanum().required(),
+  pseudo: Joi.string().min(4).max(30).alphanum().required(),
   email: Joi.string().email().required(),
   password: Joi.string().min(8).required(),
   token: Joi.string().required(),

@@ -12,8 +12,8 @@ module.exports = withMT({
       },
       colors: {
         primary: {
-          main: "#1337d8",
-          background: "#f8f8ff",
+          main: "#2196f3",
+          background: "#ffffff",
           accent: "#009deb",
           card: "#e6f4f1",
         },

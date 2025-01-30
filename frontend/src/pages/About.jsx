@@ -2,7 +2,7 @@ import React from "react";
 
 function About() {
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 my-28">
       <section className="mb-6">
         <h2 className="text-2xl font-semibold">Avertissement Important</h2>
         <p>
