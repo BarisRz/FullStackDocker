@@ -2,12 +2,18 @@ import { Input, Typography, Button } from "@material-tailwind/react";
 import { UserIcon, KeyIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { publicApi } from "../../api/publicApi";
+import { useAccessToken } from "../../contexts/AccessTokenContext";
+import { useUser } from "../../contexts/UserContext";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [error, setError] = useState(false);
+  const { setAccessToken } = useAccessToken();
+  const { setUser } = useUser();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -22,15 +28,23 @@ function Login() {
     }
     setUsernameError(false);
     setPasswordError(false);
-    // Effectuer une action, comme un fetch
-    console.log("Form submitted");
-    console.log("Username:", username);
-    console.log("Password:", password);
+    publicApi
+      .post("/login", { pseudo: username, password })
+      .then((response) => {
+        setAccessToken(response.data.accessToken);
+        setUser(response.data.user);
+      })
+      .catch((error) => {
+        if (error.response.status === 500) {
+          console.error("Server error");
+        }
+        setError(error.response.status);
+      });
   };
 
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-      <Typography variant="h6">Welcome back!</Typography>
+      <Typography variant="h6">Welcome back</Typography>
       <div className="space-y-2">
         <Input
           color="blue"
@@ -40,14 +54,19 @@ function Login() {
           icon={<UserIcon className="text-blue-700" />}
           onChange={(e) => setUsername(e.target.value)}
           value={username}
-          {...(usernameError && {
-            error: username.length < 4,
+          {...((usernameError || error) && {
+            error: username.length < 4 || error === 400,
           })}
         />
         {usernameError && username.length < 4 && (
-          <Typography color="red" variant="small">
+          <Typography color="red" variant="small" className="pl-1">
             Username must be at least <span className="font-black">4</span>{" "}
             characters long
+          </Typography>
+        )}
+        {error && error === 400 && (
+          <Typography color="red" variant="small" className="pl-1">
+            User not found
           </Typography>
         )}
       </div>
@@ -60,14 +79,19 @@ function Login() {
           icon={<KeyIcon className="text-blue-700" />}
           onChange={(e) => setPassword(e.target.value)}
           value={password}
-          {...(passwordError && {
-            error: password.length < 8,
+          {...((passwordError || error) && {
+            error: password.length < 8 || error === 401,
           })}
         />
         {passwordError && password.length < 8 && (
-          <Typography color="red" variant="small">
+          <Typography color="red" variant="small" className="pl-1">
             Password must be at least <span className="font-black">8</span>{" "}
             characters long
+          </Typography>
+        )}
+        {error && error === 401 && (
+          <Typography color="red" variant="small" className="pl-1">
+            Incorrect password
           </Typography>
         )}
       </div>
