@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { publicApi } from "../../api/publicApi";
 import { useAccessToken } from "../../contexts/AccessTokenContext";
 import { useUser } from "../../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -14,6 +15,7 @@ function Login() {
   const [error, setError] = useState(false);
   const { setAccessToken } = useAccessToken();
   const { setUser } = useUser();
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -33,6 +35,7 @@ function Login() {
       .then((response) => {
         setAccessToken(response.data.accessToken);
         setUser(response.data.user);
+        navigate("/");
       })
       .catch((error) => {
         if (error.response.status === 500) {
