@@ -104,6 +104,12 @@ function Login() {
             characters long
           </Typography>
         )}
+        {password.length < 8 && !passwordError && (
+          <Typography variant="small" className="pl-1">
+            Password must be at least <span className="font-black">8</span>{" "}
+            characters long
+          </Typography>
+        )}
         {error && error === 401 && (
           <Typography color="red" variant="small" className="pl-1">
             Incorrect password
