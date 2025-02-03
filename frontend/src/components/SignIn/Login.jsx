@@ -2,10 +2,13 @@ import { Input, Typography, Button } from "@material-tailwind/react";
 import { UserIcon, KeyIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { publicApi } from "../../api/publicApi";
+import { useMutation } from "@tanstack/react-query";
 import { useAccessToken } from "../../contexts/AccessTokenContext";
 import { useUser } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+import { login } from "../../api/SignIn/api";
+import { toast } from "react-hot-toast";
+import { Success } from "../Toastify/Success";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -16,6 +19,22 @@ function Login() {
   const { setAccessToken } = useAccessToken();
   const { setUser } = useUser();
   const navigate = useNavigate();
+
+  const { mutate } = useMutation({
+    mutationFn: login,
+    onSuccess: (data) => {
+      setAccessToken(data.accessToken);
+      setUser(data.user);
+      navigate("/");
+      toast.success("Logged in");
+    },
+    onError: (error) => {
+      if (error.response.status === 500) {
+        console.error("Server error");
+      }
+      setError(error.response.status);
+    },
+  });
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -30,19 +49,8 @@ function Login() {
     }
     setUsernameError(false);
     setPasswordError(false);
-    publicApi
-      .post("/login", { pseudo: username, password })
-      .then((response) => {
-        setAccessToken(response.data.accessToken);
-        setUser(response.data.user);
-        navigate("/");
-      })
-      .catch((error) => {
-        if (error.response.status === 500) {
-          console.error("Server error");
-        }
-        setError(error.response.status);
-      });
+
+    mutate({ pseudo: username, password });
   };
 
   return (
