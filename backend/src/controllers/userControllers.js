@@ -12,7 +12,7 @@ const add = async (req, res) => {
 };
 
 const emailConfirmation = async (req, res) => {
-  const { token } = req.body;
+  const { token } = req.query;
   try {
     const result = await userManager.verifyEmail(token);
     if (result === 0) {

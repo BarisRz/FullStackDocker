@@ -7,5 +7,18 @@ const login = async ({ pseudo, password }) => {
   });
   return response.data;
 };
+const signUp = async ({ pseudo, password, email }) => {
+  const response = await publicApi.post("/inscription", {
+    pseudo,
+    password,
+    email,
+  });
+  return response;
+};
 
-export { login };
+const emailConfirmation = async (token) => {
+  const response = await publicApi.get(`/verify-email?token=${token}`);
+  return response;
+};
+
+export { login, signUp, emailConfirmation };

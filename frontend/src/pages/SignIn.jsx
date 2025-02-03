@@ -12,7 +12,7 @@ import SignUp from "../components/SignIn/SignUp";
 export default function SignIn() {
   return (
     <section className="flex h-screen justify-center items-center">
-      <Card className="w-96 h-[700px]">
+      <Card className="w-96 h-[500px]">
         <Tabs value="login">
           <TabsHeader
             indicatorProps={{

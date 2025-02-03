@@ -7,7 +7,7 @@ function Navbar() {
   const { accessToken } = useAccessToken();
   const { user } = useUser();
   return (
-    <nav className=" h-[60px] flex items-center px-4 justify-between border-b border-black/10 fixed w-full top-0 left-0 bg-primary-background">
+    <nav className=" h-[60px] flex items-center px-4 justify-between border-b border-black/10 fixed w-full top-0 left-0 bg-primary-background z-50">
       <div className="flex items-center gap-2">
         <Link to={"/"}>
           <img src="logo.svg" alt="logo of the website" className="h-8" />

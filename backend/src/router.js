@@ -21,16 +21,18 @@ const {
   tokenGeneration,
   sendMailPasswordReset,
 } = require("./middlewares/mailling");
-
+const {
+  simulateBadConnection,
+} = require("./middlewares/simulateBadConnection");
 // API routes
-
+router.use(simulateBadConnection);
 /* User route */
 router.post(
   "/inscription",
   tokenGeneration,
+  inscription,
   emailConfirmation,
   sendMail,
-  inscription,
   hashPassword,
   userControllers.add
 ); // pseudo, email, password in body

@@ -15,6 +15,7 @@ import App from "./pages/App.jsx";
 import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
 import SignIn from "./pages/SignIn.jsx";
+import MailConfirmation from "./pages/MailConfirmation";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
         path: "/signin",
         element: <SignIn />,
       },
+      {
+        path: "/verify-email",
+        element: <MailConfirmation />,
+      },
     ],
   },
 ]);
@@ -44,7 +49,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <UserProvider>
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={router} />
-          <Toaster position="bottom-center" />
+          <Toaster
+            position="top-center"
+            containerStyle={{
+              top: 70,
+            }}
+          />
         </QueryClientProvider>
       </UserProvider>
     </AccessTokenProvider>

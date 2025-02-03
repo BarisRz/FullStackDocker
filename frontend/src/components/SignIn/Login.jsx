@@ -8,7 +8,6 @@ import { useUser } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../api/SignIn/api";
 import { toast } from "react-hot-toast";
-import { Success } from "../Toastify/Success";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -20,7 +19,7 @@ function Login() {
   const { setUser } = useUser();
   const navigate = useNavigate();
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: login,
     onSuccess: (data) => {
       setAccessToken(data.accessToken);
@@ -29,6 +28,7 @@ function Login() {
       toast.success("Logged in");
     },
     onError: (error) => {
+      toast.error("An error occurred");
       if (error.response.status === 500) {
         console.error("Server error");
       }
@@ -55,7 +55,9 @@ function Login() {
 
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-      <Typography variant="h6">Welcome back</Typography>
+      <Typography variant="h6" className="self-center">
+        Welcome back
+      </Typography>
       <div className="space-y-2">
         <Input
           color="blue"
@@ -68,6 +70,7 @@ function Login() {
           {...((usernameError || error) && {
             error: username.length < 4 || error === 400,
           })}
+          disabled={isPending}
         />
         {usernameError && username.length < 4 && (
           <Typography color="red" variant="small" className="pl-1">
@@ -93,6 +96,7 @@ function Login() {
           {...((passwordError || error) && {
             error: password.length < 8 || error === 401,
           })}
+          disabled={isPending}
         />
         {passwordError && password.length < 8 && (
           <Typography color="red" variant="small" className="pl-1">
@@ -106,8 +110,13 @@ function Login() {
           </Typography>
         )}
       </div>
-      <Button type="submit" color="blue">
-        Submit
+      <Button
+        type="submit"
+        color="blue"
+        loading={isPending}
+        className="place-content-center"
+      >
+        {isPending ? "Loading" : "Login"}
       </Button>
       <Typography variant="small" className="pl-1">
         Forgot Password? Click{" "}
