@@ -7,13 +7,14 @@ import {
 import { UserIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useAccessToken } from "../../contexts/AccessTokenContext";
 import { useUser } from "../../contexts/UserContext";
+import DrawerContent from "./DrawerContent";
 
 function Navbar() {
-  const { accessToken } = useAccessToken();
   const { user } = useUser();
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  console.log(user);
   return (
     <>
       <nav className=" h-[60px] flex items-center px-4 justify-between border-b border-black/10 fixed w-full top-0 left-0 bg-primary-background z-50">
@@ -34,9 +35,6 @@ function Navbar() {
           <Link to={"/contact"}>
             <Typography variant="h6">Contact</Typography>
           </Link>
-          <p className="text-ellipsis w-20 overflow-hidden whitespace-nowrap">
-            {accessToken}
-          </p>
           <p>{user && user.email}</p>
         </div>
         {user ? (
@@ -49,13 +47,15 @@ function Navbar() {
           </Link>
         )}
       </nav>
-      <Drawer
-        placement="right"
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-      >
-        <div className="flex items-center justify-center h-full">Test</div>
-      </Drawer>
+      {user && (
+        <Drawer
+          placement="right"
+          open={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+        >
+          <DrawerContent close={() => setDrawerOpen(false)} />
+        </Drawer>
+      )}
     </>
   );
 }

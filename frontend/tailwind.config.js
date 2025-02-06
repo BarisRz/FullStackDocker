@@ -16,6 +16,8 @@ module.exports = withMT({
           background: "#ffffff",
           accent: "#009deb",
           card: "#e6f4f1",
+          text: "#455a64",
+          "text-hover": "#263238",
         },
       },
       height: {
