@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Input, Typography, Button, Spinner } from "@material-tailwind/react";
+import { Link } from "react-router-dom";
 import {
   UserIcon,
   EnvelopeIcon,
@@ -146,6 +147,12 @@ function SignUp() {
       <Button type="submit" color="blue">
         Sign Up
       </Button>
+      <Typography className="text-xs">
+        By signing up, you agree to our terms conditions and privacy policy.{" "}
+        <Link to={"/about"} className="text-primary-main">
+          Here
+        </Link>
+      </Typography>
     </form>
   );
 }
