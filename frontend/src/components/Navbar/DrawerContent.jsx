@@ -1,5 +1,4 @@
 import {
-  Button,
   Typography,
   IconButton,
   List,
@@ -8,6 +7,8 @@ import {
   ListItemSuffix,
   Switch,
 } from "@material-tailwind/react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   XMarkIcon,
   ArrowLeftStartOnRectangleIcon,
@@ -18,9 +19,13 @@ import {
   MoonIcon,
 } from "@heroicons/react/24/solid";
 import { useUser } from "../../contexts/UserContext";
+import { useAccessToken } from "../../contexts/AccessTokenContext";
 
 function DrawerContent({ close }) {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
+  const { setAccessToken } = useAccessToken();
+  const [darkMode, setDarkMode] = useState(false);
+
   return (
     <div className="h-full">
       <div className="flex justify-between items-center p-4">
@@ -42,13 +47,20 @@ function DrawerContent({ close }) {
           </ListItemPrefix>
           Profil
         </ListItem>
-        <ListItem color="blue">
+        <ListItem color="blue" onClick={() => setDarkMode((prev) => !prev)}>
           <ListItemPrefix>
             <MoonIcon className="w-5 h-5" />
           </ListItemPrefix>
           Dark mode
           <ListItemSuffix>
-            <Switch color="blue" />
+            <Switch
+              color="blue"
+              checked={darkMode}
+              onChange={(e) => {
+                e.stopPropagation();
+                setDarkMode((prev) => !prev);
+              }}
+            />
           </ListItemSuffix>
         </ListItem>
         <ListItem color="blue">
