@@ -5,4 +5,9 @@ const logout = async () => {
   return response;
 };
 
-export { logout };
+const handleRefreshToken = async () => {
+  const response = await publicApi.get("/refresh");
+  return response;
+};
+
+export { logout, handleRefreshToken };

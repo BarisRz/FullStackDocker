@@ -1,6 +1,6 @@
 import { Input, Typography, Button } from "@material-tailwind/react";
 import { UserIcon, KeyIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { useAccessToken } from "../../contexts/AccessTokenContext";
@@ -16,8 +16,14 @@ function Login() {
   const [passwordError, setPasswordError] = useState(false);
   const [error, setError] = useState(false);
   const { setAccessToken } = useAccessToken();
-  const { setUser } = useUser();
+  const { setUser, user } = useUser();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, []);
 
   const { mutate, isPending } = useMutation({
     mutationFn: login,

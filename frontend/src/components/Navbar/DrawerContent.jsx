@@ -29,7 +29,7 @@ function DrawerContent({ close }) {
   const { setAccessToken } = useAccessToken();
   const [darkMode, setDarkMode] = useState(false);
 
-  const { data, mutate, isPending } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: logout,
     onSuccess: () => {
       setAccessToken(null);
@@ -42,8 +42,6 @@ function DrawerContent({ close }) {
       console.error(error.response.data.error);
     },
   });
-
-  console.log(data);
 
   if (isPending) {
     return (
