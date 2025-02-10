@@ -1,6 +1,143 @@
-import React from "react";
+import { useState } from "react";
 
 function About() {
+  const [langage, setLangage] = useState("fr");
+
+  if (langage === "en") {
+    <div className="container mx-auto p-4 my-28">
+      <section className="mb-6">
+        <h2 className="text-2xl font-semibold">Important Disclaimer</h2>
+        <p>
+          This website was created as part of a personal project to practice and
+          improve my web development skills. While I have taken care to follow
+          security and privacy standards, please note that this site is for
+          learning purposes only. Do not disclose any sensitive or confidential
+          information while using it. Thank you for your understanding and
+          cooperation! 😊
+        </p>
+      </section>
+
+      <h1 className="text-2xl font-bold mb-4">Legal Notice</h1>
+      <section className="mb-6">
+        <h2 className="text-xl font-semibold">Site Publisher</h2>
+        <p>
+          <strong>Lorga</strong> is a personal project developed and published
+          by <strong>Baris GUNAY</strong> to practice creating a full-stack
+          website. This project is purely demonstrative and educational.
+        </p>
+        <p>
+          Contact: <strong>baris.gunay.pro@gmail.com</strong>
+        </p>
+        <p>
+          Hosting provider: OVH SAS, 9 Rue du Bass. de l'Industrie, 67000
+          Strasbourg, France.
+        </p>
+      </section>
+
+      <section className="mb-6">
+        <h2 className="text-xl font-semibold">Privacy Policy</h2>
+        <p>
+          <strong>Collected Data:</strong> This site only collects strictly
+          necessary authentication information:
+        </p>
+        <ul className="list-disc pl-5">
+          <li>An email address and username</li>
+          <li>A password (encrypted and secured)</li>
+          <li>
+            A refresh token (cookie used to manage user sessions, allowing the
+            renewal of access tokens required for protected resources)
+          </li>
+        </ul>
+        <p>
+          <strong>Data Purpose:</strong> This data is used exclusively for
+          authentication. No data is shared with third parties.
+        </p>
+      </section>
+
+      <section className="mb-6">
+        <h2 className="text-xl font-semibold">Data Security</h2>
+        <p>
+          I have taken all possible measures to secure user accounts. However,
+          during the initial launch, this site may not systematically use HTTPS.
+          It is planned to enable HTTPS once deployed. It is strongly
+          recommended not to use sensitive passwords or those used on other
+          sites.
+        </p>
+      </section>
+
+      <section className="mb-6">
+        <h2 className="text-xl font-semibold">Data Retention Period</h2>
+        <p>Inactive accounts for over 12 months may be deleted.</p>
+      </section>
+
+      <section className="mb-6">
+        <h2 className="text-xl font-semibold">User Rights</h2>
+        <p>In accordance with GDPR, you have the following rights:</p>
+        <ul className="list-disc pl-5">
+          <li>Access to your data</li>
+          <li>Rectification or deletion of your data</li>
+          <li>Withdrawal of consent</li>
+          <li>Filing complaints with the CNIL</li>
+        </ul>
+        <p>
+          Contact: <strong>baris.gunay.pro@gmail.com</strong>
+        </p>
+      </section>
+
+      <section className="mb-6">
+        <h2 className="text-xl font-semibold">Use of Cookies</h2>
+        <p>
+          Only one cookie (refresh token) is used to manage authentication. It
+          is not used for tracking or analytics purposes.
+        </p>
+      </section>
+
+      <section className="mb-6">
+        <h2 className="text-xl font-semibold">Advertisements</h2>
+        <p>No ads are displayed on this site.</p>
+      </section>
+
+      <section className="mb-6">
+        <h2 className="text-xl font-semibold">Terms of Use (ToU)</h2>
+        <ol className="list-decimal pl-5">
+          <li>
+            <strong>Purpose of the site:</strong> Demonstration project
+            showcasing my full-stack development skills.
+          </li>
+          <li>
+            <strong>Responsible use:</strong> It is prohibited to use this site
+            for illegal or harmful purposes.
+          </li>
+          <li>
+            <strong>Security:</strong> While I have taken all possible measures
+            to protect accounts, please note that this site is for training
+            purposes and does not guarantee professional-level security.
+            Therefore, it is recommended to avoid using sensitive data.
+          </li>
+          <li>
+            <strong>Intellectual property:</strong> The code and design are the
+            property of the creator.
+          </li>
+          <li>
+            <strong>Limitation of liability:</strong> The author disclaims all
+            responsibility for technical issues.
+          </li>
+          <li>
+            <strong>Modifications:</strong> Terms may change, please check them
+            regularly.
+          </li>
+        </ol>
+      </section>
+
+      <section>
+        <h2 className="text-xl font-semibold">Contact</h2>
+        <p>
+          For any questions: <strong>baris.gunay.pro@gmail.com</strong>
+        </p>
+      </section>
+    </div>;
+  }
+
   return (
     <div className="container mx-auto p-4 my-28">
       <section className="mb-6">
