@@ -4,7 +4,10 @@ import {
   IconButton,
   Drawer,
 } from "@material-tailwind/react";
-import { UserIcon } from "@heroicons/react/24/outline";
+import {
+  UserIcon,
+  ArrowRightEndOnRectangleIcon,
+} from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useUser } from "../../contexts/UserContext";
@@ -43,7 +46,10 @@ function Navbar() {
           </IconButton>
         ) : (
           <Link to={"/signin"}>
-            <Button color="blue">Sign In</Button>
+            <Button color="blue" className="flex gap-2 px-3 items-center">
+              <ArrowRightEndOnRectangleIcon className="w-5 h-5" />
+              <p className="pr-2">Sign In</p>
+            </Button>
           </Link>
         )}
       </nav>

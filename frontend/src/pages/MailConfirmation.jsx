@@ -15,7 +15,7 @@ function MailConfirmation() {
   const [query] = useSearchParams();
   const token = query.get("token");
 
-  const { data, isPending, isSuccess, isError } = useQuery({
+  const { isPending, isError } = useQuery({
     queryKey: ["emailConfirmation", token],
     queryFn: () => emailConfirmation(token),
   });

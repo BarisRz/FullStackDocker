@@ -124,7 +124,7 @@ function Login() {
       >
         {isPending ? "Loading" : "Login"}
       </Button>
-      <Typography variant="small" className="pl-1">
+      <Typography variant="small" className="pl-1 text-xs">
         Forgot Password? Click{" "}
         <Link to={"/forgot-password"} className="text-primary-main">
           Here

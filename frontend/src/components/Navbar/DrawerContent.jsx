@@ -6,9 +6,11 @@ import {
   ListItemPrefix,
   ListItemSuffix,
   Switch,
+  Spinner,
 } from "@material-tailwind/react";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
 import {
   XMarkIcon,
   ArrowLeftStartOnRectangleIcon,
@@ -18,6 +20,7 @@ import {
   LockClosedIcon,
   MoonIcon,
 } from "@heroicons/react/24/solid";
+import { logout } from "../../api/User/api";
 import { useUser } from "../../contexts/UserContext";
 import { useAccessToken } from "../../contexts/AccessTokenContext";
 
@@ -25,6 +28,30 @@ function DrawerContent({ close }) {
   const { user, setUser } = useUser();
   const { setAccessToken } = useAccessToken();
   const [darkMode, setDarkMode] = useState(false);
+
+  const { data, mutate, isPending } = useMutation({
+    mutationFn: logout,
+    onSuccess: () => {
+      setAccessToken(null);
+      setUser(null);
+      toast.success("Logged out");
+      close();
+    },
+    onError: (error) => {
+      toast.error("An error occurred");
+      console.error(error.response.data.error);
+    },
+  });
+
+  console.log(data);
+
+  if (isPending) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <Spinner color="blue" className="w-10 h-10" />
+      </div>
+    );
+  }
 
   return (
     <div className="h-full">
@@ -47,7 +74,11 @@ function DrawerContent({ close }) {
           </ListItemPrefix>
           Profil
         </ListItem>
-        <ListItem color="blue" onClick={() => setDarkMode((prev) => !prev)}>
+        <ListItem
+          color="blue"
+          onClick={() => setDarkMode((prev) => !prev)}
+          disabled={true}
+        >
           <ListItemPrefix>
             <MoonIcon className="w-5 h-5" />
           </ListItemPrefix>
@@ -84,7 +115,10 @@ function DrawerContent({ close }) {
           Manage account
         </ListItem>
         <hr className="my-2 w-10/12 place-self-center" />
-        <ListItem color="blue">
+        <ListItem
+          onClick={() => mutate()}
+          className="hover:bg-red-400 hover:text-white"
+        >
           <ListItemPrefix>
             <ArrowLeftStartOnRectangleIcon className="w-5 h-5" />
           </ListItemPrefix>
