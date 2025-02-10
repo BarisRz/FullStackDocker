@@ -1,38 +1,43 @@
+import { useEffect } from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { Outlet } from "react-router-dom";
+import Navbar from "../components/Navbar/Navbar";
+import { useAccessToken } from "../contexts/AccessTokenContext";
+import { useUser } from "../contexts/UserContext";
+import { handleRefreshToken } from "../api/User/api";
+import { useQuery } from "@tanstack/react-query";
+import { Spinner } from "@material-tailwind/react";
 
 function App() {
-  const [data, setData] = useState([]);
+  const { setAccessToken } = useAccessToken();
+  const { setUser } = useUser();
+
+  const { data, isLoading, isSuccess, isError } = useQuery({
+    queryKey: ["refreshToken"],
+    queryFn: handleRefreshToken,
+    retry: 0,
+    staleTime: 14 * 60 * 1000, // 14 minutes
+    refetchInterval: 14 * 60 * 1000, // Refetch toutes les 14 minutes
+  });
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/movies`).then((res) => {
-      setData(res.data);
-    });
-  }, []);
+    if (isSuccess) {
+      setAccessToken(data.data.accessToken);
+      setUser(data.data.user);
+    }
+    if (isError) {
+      console.log("Error while refreshing token");
+      setUser(false);
+      setAccessToken(false);
+    }
+  }, [isSuccess, isError]);
 
   return (
     <>
-      <div className="flex flex-col w-screen h-screen items-center justify-center">
-        FullStack Template with React, Express, and MySQL, easy to deploy with
-        Docker, dont forget to check the README.md file!
-        <p className="">
-          Test Backend API (if correct you should see a movie list) :
-        </p>
-        <div>
-          {data.length === 0 ? (
-            <p>
-              If you see this, you may have wrong info in both .env from
-              /frontend and /backend
-            </p>
-          ) : (
-            <ul>
-              {data.map((movie) => (
-                <li key={movie.id}>{movie.title}</li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
+      <Navbar fetching={isLoading} />
+      <main className="mt-[60px]">
+        <Outlet />
+      </main>
     </>
   );
 }

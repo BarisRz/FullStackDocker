@@ -1,5 +1,4 @@
 -- DROP previous tables if they exist to avoid conflicts
-DROP TABLE IF EXISTS movies;
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -11,6 +10,13 @@ CREATE TABLE users (
     email_verified BOOLEAN NOT NULL DEFAULT FALSE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
+CREATE TABLE refresh_token (
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    token VARCHAR(1000) NOT NULL UNIQUE,
+    expiration_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 DROP TABLE IF EXISTS password_reset;
 CREATE TABLE password_reset (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -67,3 +73,22 @@ CREATE TABLE user_comment (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (task_id) REFERENCES task(id) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
+SET GLOBAL event_scheduler = ON;
+CREATE EVENT IF NOT EXISTS clean_expired_records
+ON SCHEDULE EVERY 1 DAY
+STARTS CURRENT_TIMESTAMP
+DO
+BEGIN
+    -- Supprimer les tokens expirés de la table refresh_token
+    DELETE FROM refresh_token
+    WHERE expiration_date < NOW();
+
+    -- Supprimer les tokens expirés de la table password_reset
+    DELETE FROM password_reset
+    WHERE expiration_date < NOW();
+
+    -- Supprimer les tokens expirés de la table email_confirmation
+    DELETE FROM email_confirmation
+    WHERE expiration_date < NOW();
+END;

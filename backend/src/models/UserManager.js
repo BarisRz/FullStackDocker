@@ -72,10 +72,10 @@ class UserManager extends AbstractManager {
     return 0;
   }
 
-  async updatePassword(user) {
+  async updatePassword(user, id) {
     const [result] = await this.database.query(
-      `UPDATE users SET password = ? WHERE email = ?`,
-      [user.password, user.email]
+      `UPDATE ${this.table} SET password = ? WHERE email = ? AND id = ?`,
+      [user.password, user.email, id]
     );
     return result.affectedRows;
   }
@@ -87,5 +87,46 @@ class UserManager extends AbstractManager {
     );
     return result;
   }
+
+  async read(pseudo) {
+    const [result] = await this.database.query(
+      `SELECT * FROM ${this.table} WHERE pseudo = ?`,
+      [pseudo]
+    );
+    return result;
+  }
+
+  async createRefreshToken(id, token) {
+    const [result] = await this.database.query(
+      `INSERT INTO refresh_token (user_id, token, expiration_date) VALUES (?, ?, DATE_ADD(NOW(), INTERVAL 7 DAY))`,
+      [id, token]
+    );
+    return result.insertId;
+  }
+
+  async verifyRefreshToken(token, id) {
+    const [result] = await this.database.query(
+      `SELECT * FROM refresh_token WHERE token = ? AND expiration_date > NOW() AND user_id = ?`,
+      [token, id]
+    );
+    return result;
+  }
+
+  async deleteRefreshToken(token) {
+    const [result] = await this.database.query(
+      `DELETE FROM refresh_token WHERE token = ?`,
+      [token]
+    );
+    return result.affectedRows;
+  }
+
+  async deleteUser(user_id) {
+    const [result] = await this.database.query(
+      `DELETE FROM ${this.table} WHERE id = ?`,
+      [user_id]
+    );
+    return result.affectedRows;
+  }
 }
+
 module.exports = UserManager;
