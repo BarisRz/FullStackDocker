@@ -35,6 +35,7 @@ function DrawerContent({ close }) {
       setAccessToken(null);
       setUser(null);
       toast.success("Logged out");
+      window.location.replace("/");
       close();
     },
     onError: (error) => {

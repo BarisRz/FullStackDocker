@@ -12,6 +12,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useUser } from "../../contexts/UserContext";
 import DrawerContent from "./DrawerContent";
+import logo from "../../assets/logo.svg";
 
 function Navbar({ fetching }) {
   const { user } = useUser();
@@ -22,7 +23,7 @@ function Navbar({ fetching }) {
       <nav className=" h-[60px] flex items-center px-4 justify-between border-b border-black/10 fixed w-full top-0 left-0 bg-primary-background z-50">
         <div className="flex items-center gap-2">
           <Link to={"/"}>
-            <img src="logo.svg" alt="logo of the website" className="h-8" />
+            <img src={logo} alt="logo of the website" className="h-8" />
           </Link>
           <div className="w-[1px] h-6 bg-black/20 mx-2" />
           <Link to={"/"}>

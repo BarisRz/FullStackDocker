@@ -5,4 +5,9 @@ const createTaskGroup = async (taskGroup) => {
   return response;
 };
 
-export { createTaskGroup };
+const getTaskGroup = async (id) => {
+  const response = await protectedApi.get(`/task-group/${id}`);
+  return response;
+};
+
+export { createTaskGroup, getTaskGroup };

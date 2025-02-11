@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Spinner, Button } from "@material-tailwind/react";
@@ -22,7 +23,8 @@ function ProtectedRoute() {
       </section>
     );
   }
-  if (isError) {
+
+  if (isError || accessToken === false) {
     return (
       <section className="flex flex-col h-screen justify-center items-center gap-4">
         <LockClosedIcon className="w-20 h-20 text-red-500" />
