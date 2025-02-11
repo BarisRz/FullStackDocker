@@ -4,6 +4,11 @@ const add = async (req, res) => {
   const taskGroup = req.body;
   const { id } = req.user;
   try {
+    if (taskGroup.name.trim().length < 3) {
+      return res
+        .status(409)
+        .json({ error: "Name must be at least 3 characters long" });
+    }
     const insertId = await taskManager.create(id, taskGroup);
     res.status(201).json({ insertId });
   } catch (error) {

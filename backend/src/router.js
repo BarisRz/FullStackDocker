@@ -24,8 +24,9 @@ const {
 const {
   simulateBadConnection,
 } = require("./middlewares/simulateBadConnection");
+
 // API routes
-router.use(simulateBadConnection);
+// router.use(simulateBadConnection);
 /* User route */
 router.post(
   "/inscription",
@@ -50,6 +51,9 @@ router.get("/refresh", userControllers.handleRefreshToken);
 
 // Protected route
 router.use(verifyToken);
+
+//
+router.get("/protected-route", userControllers.userAuthorized);
 
 // User route
 router.put("/user/password", hashPassword, userControllers.changePassword); // password in body

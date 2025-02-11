@@ -34,7 +34,6 @@ function Navbar({ fetching }) {
           <Link to={"/contact"}>
             <Typography variant="h6">Contact</Typography>
           </Link>
-          <p>{user && user.email}</p>
         </div>
         {!fetching &&
           (user ? (

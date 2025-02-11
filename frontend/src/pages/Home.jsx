@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { Button, Typography } from "@material-tailwind/react";
 import { Step, Stepper } from "@material-tailwind/react";
 import {
@@ -9,10 +9,13 @@ import {
   ArchiveBoxIcon,
 } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
+import { useUser } from "../contexts/UserContext";
 
 function Home() {
   const [activeStep, setActiveStep] = useState(0);
   const [hasClicked, setHasClicked] = useState(false);
+
+  const { user } = useUser();
 
   useEffect(() => {
     let intervalId;
@@ -51,7 +54,7 @@ function Home() {
           </span>
         </Typography>
         <Link
-          to={"/signin"}
+          to={user ? "/taskgroups" : "/signin"}
           className="flex justify-center w-[180px] justify-self-center"
         >
           <Button

@@ -30,13 +30,19 @@ function App() {
       setUser(false);
       setAccessToken(false);
     }
-  }, [isSuccess, isError]);
+  }, [isSuccess, isError, data]);
 
   return (
     <>
       <Navbar fetching={isLoading} />
       <main className="mt-[60px]">
-        <Outlet />
+        {isLoading ? (
+          <section className="flex h-screen justify-center items-center">
+            <Spinner color="blue" className="w-12 h-12" />
+          </section>
+        ) : (
+          <Outlet />
+        )}
       </main>
     </>
   );

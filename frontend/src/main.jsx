@@ -16,6 +16,9 @@ import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
 import SignIn from "./pages/SignIn.jsx";
 import MailConfirmation from "./pages/MailConfirmation";
+import TaskGroup from "./pages/TaskGroup";
+import TaskGroupPerId from "./pages/TaskGroupPerId";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +41,20 @@ const router = createBrowserRouter([
       {
         path: "/verify-email",
         element: <MailConfirmation />,
+      },
+      {
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: "/taskgroups",
+            element: <TaskGroup />,
+          },
+
+          {
+            path: "/taskgroups/:id",
+            element: <TaskGroupPerId />,
+          },
+        ],
       },
     ],
   },
