@@ -20,8 +20,12 @@ const deleteUser = async () => {
   return response;
 };
 
-const protectedRoute = async () => {
-  const response = await protectedApi.get("/protected-route");
+const protectedRoute = async (accessToken) => {
+  const response = await protectedApi.get("/protected-route", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   return response;
 };
 

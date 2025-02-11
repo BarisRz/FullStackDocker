@@ -25,7 +25,7 @@ function TaskGroup() {
     mutationFn: createTaskGroup,
     onSuccess: (data) => {
       toast.success("Task group created");
-      navigate(`/taskgroups/${data.data.id}`);
+      navigate(`/taskgroups/${data.data.insertId}`);
     },
     onError: (error) => {
       toast.error(error.response.data.error);
