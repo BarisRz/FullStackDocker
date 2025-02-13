@@ -89,9 +89,6 @@ const findAllTaskFromGroup = async (req, res) => {
   const { id } = req.user;
   try {
     const result = await taskManager.readAllTaskFromGroup(group_id, id);
-    if (result.length === 0) {
-      return res.sendStatus(404);
-    }
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ error: error.message });
