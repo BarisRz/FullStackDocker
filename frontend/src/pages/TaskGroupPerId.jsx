@@ -10,6 +10,7 @@ import {
   EyeSlashIcon,
   CalendarIcon,
   PencilIcon,
+  ExclamationCircleIcon,
 } from "@heroicons/react/24/solid";
 import toast from "react-hot-toast";
 
@@ -67,7 +68,10 @@ function TaskGroupPerId() {
   if (taskGroupFetch.isError) {
     return (
       <section className="flex h-screen justify-center items-center">
-        Content not found
+        <div className="flex flex-col gap-2 items-center">
+          <ExclamationCircleIcon className="w-12 h-12 text-red-500" />
+          <Typography variant="h5">Not found.</Typography>
+        </div>
       </section>
     );
   }
