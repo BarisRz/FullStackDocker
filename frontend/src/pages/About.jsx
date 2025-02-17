@@ -20,7 +20,7 @@ function About() {
             ? "Mentions Légales et Conditions d'Utilisation"
             : "Legal Information and Terms of Use"}
         </h1>
-        <Menu>
+        <Menu allowHover>
           <MenuHandler>
             <Button className="flex items-center gap-2" color="white">
               <img

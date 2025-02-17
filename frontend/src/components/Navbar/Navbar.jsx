@@ -6,16 +6,22 @@ import {
   Menu,
   MenuItem,
   MenuHandler,
+  MenuList,
 } from "@material-tailwind/react";
 import {
   UserIcon,
   ArrowRightEndOnRectangleIcon,
+  EllipsisHorizontalIcon,
+  ArrowDownTrayIcon,
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useUser } from "../../contexts/UserContext";
 import DrawerContent from "./DrawerContent";
 import logo from "../../assets/logo.svg";
+import CV from "../../assets/CV.pdf";
+import Github from "../../assets/github.svg";
+import Linkedin from "../../assets/linkedin.svg";
 
 function Navbar({ fetching }) {
   const { user } = useUser();
@@ -41,6 +47,17 @@ function Navbar({ fetching }) {
                 </Typography>
               </MenuItem>
             </Link>
+            <Link to={"/taskgroupslist"}>
+              <MenuItem color="blue">
+                <Typography
+                  variant="h6"
+                  color="blue-gray"
+                  className="flex items-center text-sm font-bold"
+                >
+                  Your work
+                </Typography>
+              </MenuItem>
+            </Link>
             <Link to={"/about"}>
               <MenuItem color="blue">
                 <Typography
@@ -52,17 +69,60 @@ function Navbar({ fetching }) {
                 </Typography>
               </MenuItem>
             </Link>
-            <Link to={"/contact"}>
+            {user && (
+              <Link to={"/taskgroups"}>
+                <Button color="blue" variant="gradient">
+                  New
+                </Button>
+              </Link>
+            )}
+            <div>
               <MenuItem color="blue">
-                <Typography
-                  variant="h6"
-                  color="blue-gray"
-                  className="flex items-center text-sm font-bold"
-                >
-                  Contact
-                </Typography>
+                <Menu allowHover>
+                  <MenuHandler>
+                    <EllipsisHorizontalIcon className="w-6 h-6" />
+                  </MenuHandler>
+                  <MenuList>
+                    <MenuItem>
+                      <a
+                        href="https://github.com/BarisRz/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2"
+                      >
+                        <img
+                          src={Github}
+                          alt="Github Icon"
+                          className="w-4 h-4"
+                        />
+                        Github
+                      </a>
+                    </MenuItem>
+                    <MenuItem>
+                      <a
+                        href="https://www.linkedin.com/in/gunay-baris/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2"
+                      >
+                        <img
+                          src={Linkedin}
+                          alt="Linkedin Icon"
+                          className="w-4 h-4"
+                        />
+                        Linkedin
+                      </a>
+                    </MenuItem>
+                    <MenuItem>
+                      <a href={CV} download className="flex items-center gap-2">
+                        <ArrowDownTrayIcon className="w-4 h-4" />
+                        CV
+                      </a>
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
               </MenuItem>
-            </Link>
+            </div>
           </div>
           {!fetching &&
             (user ? (
