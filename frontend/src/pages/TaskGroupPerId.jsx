@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Typography, Spinner, Tooltip } from "@material-tailwind/react";
 import { getTaskGroup, updateTaskGroup } from "../api/TaskGroup/api";
 import { getAllTasksFromGroup } from "../api/Task/api";
@@ -13,10 +13,10 @@ import {
   ExclamationCircleIcon,
 } from "@heroicons/react/24/solid";
 import toast from "react-hot-toast";
+import Card from "../components/TaskCard/Card";
 
 function TaskGroupPerId() {
   const { id } = useParams();
-  const queryClient = useQueryClient();
   const [taskGroup, setTaskGroup] = useState({});
   const [inputTitle, setInputTitle] = useState(false);
 
@@ -83,7 +83,7 @@ function TaskGroupPerId() {
           <input
             type="text"
             name="TaskGroupTitle"
-            className="p-2 text-xl focus:outline-none border border-primary-main rounded-lg"
+            className="p-2 text-3xl focus:outline-none rounded-lg bg-primary-background font-bold"
             autoFocus
             value={taskGroup?.name}
             onChange={(e) =>
@@ -125,7 +125,9 @@ function TaskGroupPerId() {
         </Tooltip>
       </div>
       <div className="flex">
-        <div className="task-colmun bg-red-100">1</div>
+        <div className="task-colmun bg-red-100">
+          <Card />
+        </div>
         <div className="task-colmun bg-red-200">2</div>
         <div className="task-colmun bg-red-300">3</div>
       </div>
