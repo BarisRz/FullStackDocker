@@ -35,7 +35,7 @@ function App() {
   return (
     <>
       <Navbar fetching={isLoading} />
-      <main className="mt-[60px]">
+      <main className="mt-[60px] w-[1400px] mx-auto">
         {isLoading ? (
           <section className="flex h-screen justify-center items-center">
             <Spinner color="blue" className="w-12 h-12" />

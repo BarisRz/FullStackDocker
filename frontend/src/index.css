@@ -16,3 +16,12 @@
     @apply flex-1 min-w-60 max-w-[600px];
   }
 }
+
+/* Cache la scrollbar mais permet de scroller */
+::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  scrollbar-width: none; /* Firefox */
+}

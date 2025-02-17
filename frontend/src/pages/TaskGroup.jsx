@@ -44,7 +44,7 @@ function TaskGroup() {
   };
 
   return (
-    <div className="w-screen h-screen flex items-center justify-center">
+    <div className="flex justify-center items-center h-screen">
       <Card className="w-96">
         <CardHeader
           color="blue"

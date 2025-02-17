@@ -19,6 +19,7 @@ import MailConfirmation from "./pages/MailConfirmation";
 import TaskGroup from "./pages/TaskGroup";
 import TaskGroupPerId from "./pages/TaskGroupPerId";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ErrorPage from "./pages/ErrorPage";
 
 const queryClient = new QueryClient();
 
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
             element: <TaskGroupPerId />,
           },
         ],
+      },
+      {
+        path: "*",
+        element: <ErrorPage />,
       },
     ],
   },
