@@ -47,17 +47,19 @@ function Navbar({ fetching }) {
                 </Typography>
               </MenuItem>
             </Link>
-            <Link to={"/taskgroupslist"}>
-              <MenuItem color="blue">
-                <Typography
-                  variant="h6"
-                  color="blue-gray"
-                  className="flex items-center text-sm font-bold"
-                >
-                  Your work
-                </Typography>
-              </MenuItem>
-            </Link>
+            {user && (
+              <Link to={"/taskgroupslist"}>
+                <MenuItem color="blue">
+                  <Typography
+                    variant="h6"
+                    color="blue-gray"
+                    className="flex items-center text-sm font-bold"
+                  >
+                    Your work
+                  </Typography>
+                </MenuItem>
+              </Link>
+            )}
             <Link to={"/about"}>
               <MenuItem color="blue">
                 <Typography
