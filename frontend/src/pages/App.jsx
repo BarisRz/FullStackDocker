@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import axios from "axios";
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import { useAccessToken } from "../contexts/AccessTokenContext";
