@@ -34,15 +34,12 @@ function DrawerContent({ close }) {
   const { mutate, isPending } = useMutation({
     mutationFn: logout,
     onSuccess: () => {
-      setAccessToken("");
-      setUser("");
+      setUser(false);
+      setAccessToken(false);
       toast.success("Logged out");
-      close();
-      queryClient.clear();
-      window.addEventListener("unload", () => {
-        console.log("Forcing state reset");
-      });
       window.location.replace("/");
+      queryClient.clear();
+      close();
     },
     onError: (error) => {
       toast.error("An error occurred");

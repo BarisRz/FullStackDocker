@@ -15,8 +15,6 @@ function App() {
     queryKey: ["refreshToken"],
     queryFn: handleRefreshToken,
     retry: 0,
-    staleTime: 14 * 60 * 1000, // 14 minutes
-    refetchInterval: 14 * 60 * 1000, // Refetch toutes les 14 minutes
   });
 
   useEffect(() => {

@@ -9,7 +9,9 @@ const logout = async () => {
 };
 
 const handleRefreshToken = async () => {
-  const response = await publicApi.get("/refresh");
+  const response = await publicApi.get("/refresh", {
+    headers: { "Cache-Control": "no-cache, no-store, must-revalidate" },
+  });
   return response;
 };
 
@@ -23,6 +25,7 @@ const deleteUser = async () => {
 const protectedRoute = async (accessToken) => {
   const response = await protectedApi.get("/protected-route", {
     headers: {
+      "Cache-Control": "no-cache, no-store, must-revalidate",
       Authorization: `Bearer ${accessToken}`,
     },
   });

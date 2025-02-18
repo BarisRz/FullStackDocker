@@ -7,7 +7,6 @@ const protectedApi = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // Permet d'envoyer les cookies (ex: refreshToken)
 });
 
 export { protectedApi };
