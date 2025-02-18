@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getTaskGroupsList } from "../api/TaskGroup/api";
-import { Link } from "react-router-dom";
 import {
   Spinner,
   Typography,
@@ -11,13 +10,21 @@ import {
 } from "@material-tailwind/react";
 import { NoSymbolIcon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import TaskGroupCard from "../components/TaskGroup/TaskGroupCard";
+import EmptyList from "../components/TaskGroup/EmptyList";
 
 function TaskGroupList() {
   const [search, setSearch] = useState("");
+  const [taskGroups, setTaskGroups] = useState([]);
   const getTaskGroupsListQuery = useQuery({
     queryKey: ["taskGroupsList"],
     queryFn: getTaskGroupsList,
   });
+
+  useEffect(() => {
+    if (getTaskGroupsListQuery.isSuccess) {
+      setTaskGroups(getTaskGroupsListQuery.data.data);
+    }
+  }, [getTaskGroupsListQuery]);
 
   if (getTaskGroupsListQuery.isFetching) {
     return (
@@ -59,19 +66,23 @@ function TaskGroupList() {
         </div>
       </div>
       <div>
-        <List>
-          {getTaskGroupsListQuery.data.data
-            .filter((element) =>
-              element.name.toLowerCase().includes(search.toLowerCase().trim())
-            )
-            .map((taskGroup) => {
-              return (
-                <Link to={`/taskgroups/${taskGroup.id}`}>
-                  <TaskGroupCard key={taskGroup.id} taskGroup={taskGroup} />
-                </Link>
-              );
-            })}
-        </List>
+        {taskGroups.length === 0 ? (
+          <EmptyList />
+        ) : (
+          <List>
+            {taskGroups
+              .filter((element) =>
+                element.name.toLowerCase().includes(search.toLowerCase().trim())
+              )
+              .map((taskGroup) => {
+                return (
+                  <div className="flex gap-2 items-center" key={taskGroup.id}>
+                    <TaskGroupCard taskGroup={taskGroup} />
+                  </div>
+                );
+              })}
+          </List>
+        )}
       </div>
     </div>
   );

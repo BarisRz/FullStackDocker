@@ -9,7 +9,7 @@ import {
   Spinner,
 } from "@material-tailwind/react";
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import {
   XMarkIcon,
@@ -29,15 +29,17 @@ function DrawerContent({ close }) {
   const { user, setUser } = useUser();
   const { setAccessToken } = useAccessToken();
   const [darkMode, setDarkMode] = useState(false);
+  const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationFn: logout,
     onSuccess: () => {
-      setAccessToken(null);
-      setUser(null);
+      setAccessToken("");
+      setUser("");
       toast.success("Logged out");
-      window.location.replace("/");
       close();
+      queryClient.clear();
+      window.location.replace("/");
     },
     onError: (error) => {
       toast.error("An error occurred");

@@ -9,24 +9,29 @@ import {
   Button,
 } from "@material-tailwind/react";
 import { TrashIcon, ExclamationTriangleIcon } from "@heroicons/react/24/solid";
+import { Link } from "react-router-dom";
 
 function TaskGroupCard({ taskGroup }) {
   const [open, setOpen] = useState(false);
 
   return (
     <>
-      <ListItem>
-        {taskGroup.name}
-        <ListItemSuffix>
-          <TrashIcon
-            className="w-6 h-6"
-            onClick={() => setOpen((prev) => !prev)}
-          />
-        </ListItemSuffix>
+      <Link to={`/taskgroups/${taskGroup.id}`} className="flex-1">
+        <ListItem>{taskGroup.name}</ListItem>
+      </Link>
+      <ListItem
+        className="w-[3.5%] h-11"
+        onClick={() => setOpen((prev) => !prev)}
+      >
+        <TrashIcon className="w-6 h-6" />
       </ListItem>
       <Dialog
         open={open}
-        handler={() => setOpen((prev) => !prev)}
+        handler={(e) => {
+          setOpen((prev) => !prev);
+          e.preventDefault();
+          e.stopPropagation();
+        }}
         className="pt-1 pl-1"
         size="xs"
       >
@@ -35,14 +40,29 @@ function TaskGroupCard({ taskGroup }) {
           This action is irreversible
         </DialogHeader>
         <DialogBody>
-          By doing this, you will delete the task group and all the tasks
-          inside, are you sure you want to do this?
+          By doing this, you will delete the task group :{" "}
+          <span className="font-bold text-black">{taskGroup.name}</span> and all
+          the tasks inside, are you sure you want to do this?
         </DialogBody>
         <DialogFooter className="space-x-2">
-          <Button color="black" onClick={() => setOpen((prev) => !prev)}>
+          <Button
+            color="black"
+            onClick={(e) => {
+              setOpen((prev) => !prev);
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
             Cancel
           </Button>
-          <Button color="red" onClick={() => setOpen((prev) => !prev)}>
+          <Button
+            color="red"
+            onClick={(e) => {
+              setOpen((prev) => !prev);
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
             Delete
           </Button>
         </DialogFooter>
