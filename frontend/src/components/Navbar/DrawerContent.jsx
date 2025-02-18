@@ -23,6 +23,7 @@ import {
 import { logout } from "../../api/User/api";
 import { useUser } from "../../contexts/UserContext";
 import { useAccessToken } from "../../contexts/AccessTokenContext";
+import { Link } from "react-router-dom";
 
 function DrawerContent({ close }) {
   const { user, setUser } = useUser();
@@ -93,12 +94,14 @@ function DrawerContent({ close }) {
             />
           </ListItemSuffix>
         </ListItem>
-        <ListItem color="blue">
-          <ListItemPrefix>
-            <Square3Stack3DIcon className="w-5 h-5" />
-          </ListItemPrefix>
-          Task group
-        </ListItem>
+        <Link to={"/taskgroupslist"} onClick={close}>
+          <ListItem color="blue">
+            <ListItemPrefix>
+              <Square3Stack3DIcon className="w-5 h-5" />
+            </ListItemPrefix>
+            Task group
+          </ListItem>
+        </Link>
         {user.role === "admin" && (
           <ListItem color="blue">
             <ListItemPrefix>

@@ -36,7 +36,7 @@ function Home() {
     setHasClicked(true);
   };
   return (
-    <div className="w-full h-screen bg-gray-50 flex flex-col items-center justify-center">
+    <div className="h-screen2 bg-gray-50 flex flex-col items-center justify-center">
       {/* Hero Section */}
       <header className="text-center">
         <Typography variant="h2" className="font-bold text-gray-900">
@@ -61,14 +61,14 @@ function Home() {
             size="lg"
             color="blue"
             variant="gradient"
-            className="mt-6 flex items-center w-full"
+            className="mt-6 flex items-center"
           >
             Get Started <ArrowRightIcon className="h-5 w-5" />
           </Button>
         </Link>
       </header>
       {/* Features Section */}
-      <section className="mt-16 w-full max-w-7xl mx-auto px-4">
+      <section className="mt-16 mx-auto px-4">
         <Typography
           variant="h3"
           className="font-bold text-gray-900 text-center"

@@ -20,6 +20,7 @@ import TaskGroup from "./pages/TaskGroup";
 import TaskGroupPerId from "./pages/TaskGroupPerId";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ErrorPage from "./pages/ErrorPage";
+import TaskGroupList from "./pages/TaskGroupList";
 
 const queryClient = new QueryClient();
 
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
           {
             path: "/taskgroups/:id",
             element: <TaskGroupPerId />,
+          },
+          {
+            path: "/taskgroupslist",
+            element: <TaskGroupList />,
           },
         ],
       },

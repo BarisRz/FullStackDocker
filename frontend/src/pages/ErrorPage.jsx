@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function ErrorPage() {
   return (
-    <div className="h-screen flex items-center justify-center flex-col gap-4">
+    <div className="h-screen2 flex items-center justify-center flex-col gap-4">
       <div className="flex flex-col items-center">
         <NoSymbolIcon className="h-20 w-20 text-red-500" />
         <h1 className="text-4xl font-bold text-center">

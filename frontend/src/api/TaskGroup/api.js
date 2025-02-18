@@ -15,4 +15,9 @@ const updateTaskGroup = async (id, taskGroup) => {
   return response;
 };
 
-export { createTaskGroup, getTaskGroup, updateTaskGroup };
+const getTaskGroupsList = async () => {
+  const response = await protectedApi.get("/task-group");
+  return response;
+};
+
+export { createTaskGroup, getTaskGroup, updateTaskGroup, getTaskGroupsList };

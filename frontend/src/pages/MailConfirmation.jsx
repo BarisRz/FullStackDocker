@@ -22,7 +22,7 @@ function MailConfirmation() {
 
   if (isPending) {
     return (
-      <section className="flex h-screen justify-center items-center">
+      <section className="flex h-screen2 justify-center items-center">
         <Card className="mt-6 w-72 shadow-lg">
           <CardBody className="flex flex-col items-center gap-4">
             <Spinner color="blue" className="w-10 h-10" />
@@ -37,7 +37,7 @@ function MailConfirmation() {
 
   if (isError) {
     return (
-      <section className="flex h-screen justify-center items-center">
+      <section className="flex h-screen2 justify-center items-center">
         <Card className="mt-6 w-72 shadow-lg">
           <CardBody className="flex flex-col items-center gap-4">
             <ExclamationCircleIcon className="w-12 h-12 text-red-500" />
@@ -54,7 +54,7 @@ function MailConfirmation() {
   }
 
   return (
-    <section className="flex h-screen justify-center items-center">
+    <section className="flex h-screen2 justify-center items-center">
       <Card className="mt-6 w-72 shadow-lg">
         <CardBody>
           <Typography variant="h5" color="blue" className="mb-2 font-semibold">

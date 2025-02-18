@@ -9,6 +9,7 @@ const add = async (req, res) => {
         .status(409)
         .json({ error: "Name must be at least 3 characters long" });
     }
+    taskGroup.name = taskGroup.name.trim();
     const insertId = await taskManager.create(id, taskGroup);
     res.status(201).json({ insertId });
   } catch (error) {
@@ -34,9 +35,9 @@ const browse = async (req, res) => {
   const { id } = req.user;
   try {
     const tasks_group = await taskManager.readAll(id);
-    if (tasks_group.length === 0) {
-      return res.sendStatus(404);
-    }
+    // if (tasks_group.length === 0) {
+    //   return res.sendStatus(404);
+    // }
     res.status(200).json(tasks_group);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -100,6 +101,12 @@ const updateTaskGroup = async (req, res) => {
   const user_id = req.user.id;
   const body = req.body;
   try {
+    if (body.name.trim().length < 3) {
+      return res
+        .status(409)
+        .json({ error: "Name must be at least 3 characters long" });
+    }
+    body.name = body.name.trim();
     const result = await taskManager.updateTaskGroup(id, body, user_id);
     res.status(201).json({ updated: result });
   } catch (error) {

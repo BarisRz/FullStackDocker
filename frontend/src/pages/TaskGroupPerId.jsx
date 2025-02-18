@@ -60,14 +60,14 @@ function TaskGroupPerId() {
 
   if (taskGroupFetch.isLoading) {
     return (
-      <section className="flex h-screen justify-center items-center">
+      <section className="flex h-screen2 justify-center items-center">
         <Spinner color="blue" className="w-12 h-12" />
       </section>
     );
   }
   if (taskGroupFetch.isError) {
     return (
-      <section className="flex h-screen justify-center items-center">
+      <section className="flex h-screen2 justify-center items-center">
         <div className="flex flex-col gap-2 items-center">
           <ExclamationCircleIcon className="w-12 h-12 text-red-500" />
           <Typography variant="h5">Not found.</Typography>

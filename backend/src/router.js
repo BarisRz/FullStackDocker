@@ -32,9 +32,9 @@ router.post(
   "/inscription",
   tokenGeneration,
   inscription,
-  emailConfirmation,
   sendMail,
   hashPassword,
+  emailConfirmation,
   userControllers.add
 ); // pseudo, email, password in body
 router.get("/verify-email", userControllers.emailConfirmation); // Token in body
