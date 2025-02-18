@@ -39,6 +39,9 @@ function DrawerContent({ close }) {
       toast.success("Logged out");
       close();
       queryClient.clear();
+      window.addEventListener("unload", () => {
+        console.log("Forcing state reset");
+      });
       window.location.replace("/");
     },
     onError: (error) => {
