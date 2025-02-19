@@ -7,6 +7,7 @@ import {
   Input,
   List,
   Chip,
+  Tooltip,
 } from "@material-tailwind/react";
 import { NoSymbolIcon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import TaskGroupCard from "../components/TaskGroup/TaskGroupCard";
@@ -37,19 +38,19 @@ function TaskGroupList() {
     );
   }
 
-  console.log(getTaskGroupsListQuery.data);
-
   return (
     <div className="mt-[100px]">
       <div className="flex justify-between items-center">
         <div className="flex gap-2">
           <Typography variant="h2">Your tasks group</Typography>
 
-          <Chip
-            color="blue"
-            value={getTaskGroupsListQuery.data.length}
-            className="h-8 self-center"
-          />
+          <Tooltip content="Number of group">
+            <Chip
+              color="blue"
+              value={getTaskGroupsListQuery.data.length}
+              className="h-8 self-center"
+            />
+          </Tooltip>
         </div>
         <div>
           <Input
@@ -66,7 +67,7 @@ function TaskGroupList() {
         {getTaskGroupsListQuery.data.length === 0 ? (
           <EmptyList />
         ) : (
-          <List>
+          <List className="flex gap-2 p-0 mt-3">
             {getTaskGroupsListQuery.data
               .filter((element) =>
                 element.name.toLowerCase().includes(search.toLowerCase().trim())

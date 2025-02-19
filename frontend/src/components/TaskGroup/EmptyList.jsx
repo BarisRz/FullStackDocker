@@ -10,7 +10,7 @@ function EmptyList() {
         No task group found. Let's create one?
       </Typography>
       <Link to={"/taskgroups"}>
-        <Button color="blue" size="sm">
+        <Button color="blue" size="sm" variant="gradient">
           Create a task group
         </Button>
       </Link>

@@ -13,7 +13,7 @@ function About() {
   const [langage, setLangage] = useState("fr");
 
   return (
-    <div className="container mx-auto p-4 my-28 flex flex-col">
+    <div className="w-full mt-[100px] mb-10 flex flex-col">
       <div className="flex items-center mb-8 justify-between">
         <h1 className="text-3xl font-extrabold">
           {langage === "fr"

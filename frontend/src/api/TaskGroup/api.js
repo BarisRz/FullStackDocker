@@ -7,12 +7,12 @@ const createTaskGroup = async (taskGroup) => {
 
 const getTaskGroup = async (id) => {
   const response = await protectedApi.get(`/task-group/${id}`);
-  return response;
+  return response.data;
 };
 
 const updateTaskGroup = async (id, taskGroup) => {
   const response = await protectedApi.put(`/task-group/${id}`, taskGroup);
-  return response;
+  return response.data;
 };
 
 const getTaskGroupsList = async () => {
