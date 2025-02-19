@@ -8,7 +8,6 @@ import { useAccessToken } from "../contexts/AccessTokenContext";
 
 function ProtectedRoute() {
   const { accessToken } = useAccessToken();
-  console.log("accessToken", accessToken);
 
   const { isFetching, isError, isSuccess } = useQuery({
     queryKey: ["protectedRoute"],

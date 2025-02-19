@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { getTaskGroupsList } from "../api/TaskGroup/api";
 import {
   Spinner,
@@ -14,17 +14,11 @@ import EmptyList from "../components/TaskGroup/EmptyList";
 
 function TaskGroupList() {
   const [search, setSearch] = useState("");
-  const [taskGroups, setTaskGroups] = useState([]);
+
   const getTaskGroupsListQuery = useQuery({
     queryKey: ["taskGroupsList"],
     queryFn: getTaskGroupsList,
   });
-
-  useEffect(() => {
-    if (getTaskGroupsListQuery.isSuccess) {
-      setTaskGroups(getTaskGroupsListQuery.data.data);
-    }
-  }, [getTaskGroupsListQuery]);
 
   if (getTaskGroupsListQuery.isFetching) {
     return (
@@ -43,14 +37,17 @@ function TaskGroupList() {
     );
   }
 
+  console.log(getTaskGroupsListQuery.data);
+
   return (
     <div className="mt-[100px]">
       <div className="flex justify-between items-center">
         <div className="flex gap-2">
           <Typography variant="h2">Your tasks group</Typography>
+
           <Chip
             color="blue"
-            value={getTaskGroupsListQuery.data.data.length}
+            value={getTaskGroupsListQuery.data.length}
             className="h-8 self-center"
           />
         </div>
@@ -66,18 +63,18 @@ function TaskGroupList() {
         </div>
       </div>
       <div>
-        {taskGroups.length === 0 ? (
+        {getTaskGroupsListQuery.data.length === 0 ? (
           <EmptyList />
         ) : (
           <List>
-            {taskGroups
+            {getTaskGroupsListQuery.data
               .filter((element) =>
                 element.name.toLowerCase().includes(search.toLowerCase().trim())
               )
-              .map((taskGroup) => {
+              .map((element) => {
                 return (
-                  <div className="flex gap-2 items-center" key={taskGroup.id}>
-                    <TaskGroupCard taskGroup={taskGroup} />
+                  <div className="flex gap-2 items-center" key={element.id}>
+                    <TaskGroupCard taskGroup={element} />
                   </div>
                 );
               })}

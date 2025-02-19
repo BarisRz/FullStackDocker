@@ -30,12 +30,11 @@ function TaskGroupPerId() {
     if (taskGroupFetch.data) {
       setTaskGroup(taskGroupFetch.data.data);
     }
-  }, [taskGroupFetch.data]); // ✅ Réagit uniquement aux changements de `data`
+  }, [taskGroupFetch.data]);
 
   const updateTaskGroupMutation = useMutation({
     mutationFn: (taskGroup) => updateTaskGroup(id, taskGroup),
     onSuccess: () => {
-      // queryClient.invalidateQueries(["taskGroup", id]);
       toast.success("Task Group updated");
     },
     onError: () => {
@@ -49,7 +48,7 @@ function TaskGroupPerId() {
   const handleUpdate = (changedKey, value) => {
     const updatedTaskGroup = { ...taskGroup, [changedKey]: value };
 
-    if (updatedTaskGroup.name.trim() === "") return; // ✅ Vérifie après mise à jour locale
+    if (updatedTaskGroup.name.trim() === "") return;
 
     setTaskGroup(updatedTaskGroup);
     updateTaskGroupMutation.mutate(updatedTaskGroup);

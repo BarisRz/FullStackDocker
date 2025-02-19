@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   ListItem,
   ListItemSuffix,
@@ -10,9 +11,26 @@ import {
 } from "@material-tailwind/react";
 import { TrashIcon, ExclamationTriangleIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
+import { deleteTaskGroup } from "../../api/TaskGroup/api";
+import toast from "react-hot-toast";
 
 function TaskGroupCard({ taskGroup }) {
   const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const deleteTaskGroupMutation = useMutation({
+    mutationFn: (id) => deleteTaskGroup(id),
+    onSuccess: () => {
+      queryClient.setQueryData(["taskGroupsList"], (old) =>
+        old.filter((element) => element.id !== taskGroup.id)
+      );
+      toast.success("Task group deleted");
+    },
+    onError: (error) => {
+      toast.error("An error occurred");
+      console.error(error.response.data.error);
+    },
+  });
 
   return (
     <>
@@ -20,17 +38,15 @@ function TaskGroupCard({ taskGroup }) {
         <ListItem>{taskGroup.name}</ListItem>
       </Link>
       <ListItem
-        className="w-[3.5%] h-11"
+        className="w-[3.5%] h-11 flex items-center justify-center"
         onClick={() => setOpen((prev) => !prev)}
       >
         <TrashIcon className="w-6 h-6" />
       </ListItem>
       <Dialog
         open={open}
-        handler={(e) => {
+        handler={() => {
           setOpen((prev) => !prev);
-          e.preventDefault();
-          e.stopPropagation();
         }}
         className="pt-1 pl-1"
         size="xs"
@@ -47,20 +63,17 @@ function TaskGroupCard({ taskGroup }) {
         <DialogFooter className="space-x-2">
           <Button
             color="black"
-            onClick={(e) => {
+            onClick={() => {
               setOpen((prev) => !prev);
-              e.preventDefault();
-              e.stopPropagation();
             }}
           >
             Cancel
           </Button>
           <Button
             color="red"
-            onClick={(e) => {
+            onClick={() => {
               setOpen((prev) => !prev);
-              e.preventDefault();
-              e.stopPropagation();
+              deleteTaskGroupMutation.mutate(taskGroup.id);
             }}
           >
             Delete

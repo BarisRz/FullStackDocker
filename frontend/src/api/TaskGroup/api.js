@@ -17,7 +17,18 @@ const updateTaskGroup = async (id, taskGroup) => {
 
 const getTaskGroupsList = async () => {
   const response = await protectedApi.get("/task-group");
-  return response;
+  return response.data;
 };
 
-export { createTaskGroup, getTaskGroup, updateTaskGroup, getTaskGroupsList };
+const deleteTaskGroup = async (id) => {
+  const response = await protectedApi.delete(`/task-group/${id}`);
+  return response.data;
+};
+
+export {
+  createTaskGroup,
+  getTaskGroup,
+  updateTaskGroup,
+  getTaskGroupsList,
+  deleteTaskGroup,
+};
