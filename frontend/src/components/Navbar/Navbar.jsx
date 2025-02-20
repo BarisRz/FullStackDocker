@@ -80,7 +80,7 @@ function Navbar({ fetching }) {
             )}
             <div>
               <MenuItem color="blue">
-                <Menu allowHover>
+                <Menu allowHover offset={15}>
                   <MenuHandler>
                     <EllipsisHorizontalIcon className="w-6 h-6" />
                   </MenuHandler>

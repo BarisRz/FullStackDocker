@@ -67,7 +67,7 @@ function TaskGroupCard({ taskGroup }) {
         </ListItem>
       </Link>
       <ListItem
-        className="w-[3.5%] h-[51.5px] flex items-center justify-center bg-red-100 hover:bg-red-300"
+        className="w-[49px] h-[51.5px] flex items-center justify-center bg-red-100 hover:bg-red-300"
         onClick={() => setOpen((prev) => !prev)}
       >
         <TrashIcon className="w-6 h-6" />

@@ -1,20 +1,16 @@
-import { useMemo } from "react";
+const DateFormatter = (previousDate, options = {}) => {
+  if (!previousDate) return "";
 
-const DateFormatter = (isoDate, options = {}) => {
-  return useMemo(() => {
-    if (!isoDate) return "";
+  const date = new Date(previousDate);
 
-    const date = new Date(isoDate);
-
-    return date.toLocaleDateString("fr-FR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      timeZone: options.timeZone || "Europe/Paris",
-    });
-  }, [isoDate, options]);
+  return date.toLocaleDateString("fr-FR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: options.timeZone || "Europe/Paris",
+  });
 };
 
 export default DateFormatter;

@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Typography, Spinner, Tooltip, Button } from "@material-tailwind/react";
+import { Typography, Spinner, Tooltip } from "@material-tailwind/react";
 import { getTaskGroup, updateTaskGroup } from "../api/TaskGroup/api";
 import { getAllTasksFromGroup } from "../api/Task/api";
 import DateFormatter from "../components/DateFormatter";
@@ -17,16 +18,21 @@ import Card from "../components/TaskCard/Card";
 function TaskGroupPerId() {
   const { id } = useParams();
   const queryClient = useQueryClient();
+  const [isInputOpen, setIsInputOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
 
+  // Query to get the task group
   const taskGroupFetchId = useQuery({
     queryKey: ["taskGroup", id],
     queryFn: () => getTaskGroup(id),
     retry: 1,
   });
 
+  // Mutation to update the task group
   const taskGroupMutation = useMutation({
     mutationFn: (updatedTaskGroup) => updateTaskGroup(id, updatedTaskGroup),
 
+    // Optimistic update
     onMutate: async (variables) => {
       await queryClient.cancelQueries(["taskGroup", id]);
 
@@ -40,6 +46,7 @@ function TaskGroupPerId() {
       return { previousTaskGroup };
     },
 
+    // Canceling the optimistic update
     onError: (err, _, context) => {
       console.error(err);
       if (context.previousTaskGroup) {
@@ -48,13 +55,36 @@ function TaskGroupPerId() {
     },
   });
 
-  const handleUpdate = () => {
-    taskGroupMutation.mutate({
-      ...taskGroupFetchId.data,
-      is_public: !taskGroupFetchId.data.is_public ? 1 : 0,
-    });
+  // function to handle the update of the task group
+  const handleUpdate = (changedKey, value) => {
+    queryClient.setQueryData(["taskGroup", id], (oldData) => ({
+      ...oldData,
+      [changedKey]: value,
+    }));
+    if (changedKey === "name" && value.trim().length < 3) return;
+    taskGroupMutation.mutate({ ...taskGroupFetchId.data, [changedKey]: value });
   };
 
+  // function to handle the input change
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  // function to force the input to stay open if inputValue is less than 3
+  const handleBlur = () => {
+    if (inputValue.trim().length >= 3) {
+      handleUpdate("name", inputValue);
+      setIsInputOpen(false); // Fermer l'input seulement si valide
+    }
+  };
+
+  // function to set the inputValue to the fetched one
+  const handleEditClick = () => {
+    setInputValue(taskGroupFetchId.data.name);
+    setIsInputOpen(true);
+  };
+
+  // handling when the data is loading
   if (taskGroupFetchId.isLoading) {
     return (
       <section className="flex h-screen2 justify-center items-center">
@@ -63,6 +93,7 @@ function TaskGroupPerId() {
     );
   }
 
+  // handling when the data is not found
   if (taskGroupFetchId.isError) {
     return (
       <section className="flex h-screen2 flex-col justify-center items-center text-center gap-4">
@@ -80,14 +111,55 @@ function TaskGroupPerId() {
     );
   }
 
+  // Date formatting
+  const date = taskGroupFetchId.data.creation_date;
+  const dateFr = DateFormatter(date);
+
   return (
     <section className="mt-[100px] space-y-2">
-      <Typography>{taskGroupFetchId.data.id}</Typography>
-      <Typography>{taskGroupFetchId.data.user_id}</Typography>
-      <Typography>{taskGroupFetchId.data.name}</Typography>
-      <Typography>{taskGroupFetchId.data.is_public}</Typography>
-      <Typography>{taskGroupFetchId.data.creation_date}</Typography>
-      <Button onClick={handleUpdate}>Mutation</Button>
+      <div className="flex items-center gap-2">
+        {isInputOpen ? (
+          <input
+            type="text"
+            size={inputValue.length || 1}
+            className="text-4xl focus:outline-none rounded-lg bg-primary-background font-bold p-0 m-0 w-auto"
+            autoFocus
+            value={inputValue}
+            onBlur={handleBlur}
+            onChange={handleInputChange}
+            onKeyDown={(e) => e.key === "Enter" && handleBlur()}
+          />
+        ) : (
+          <Typography variant="h2">{taskGroupFetchId.data.name}</Typography>
+        )}
+        <Tooltip color="blue" content="Edit">
+          <PencilIcon
+            className="w-6 h-6 text-primary-main cursor-pointer"
+            onClick={handleEditClick}
+          />
+        </Tooltip>
+
+        <Tooltip
+          color="blue"
+          content={taskGroupFetchId.data.is_public ? "Public" : "Private"}
+        >
+          {taskGroupFetchId.data.is_public ? (
+            <EyeIcon
+              className="w-6 h-6 text-primary-main cursor-pointer"
+              onClick={() => handleUpdate("is_public", 0)}
+            />
+          ) : (
+            <EyeSlashIcon
+              className="w-6 h-6 text-primary-main cursor-pointer"
+              onClick={() => handleUpdate("is_public", 1)}
+            />
+          )}
+        </Tooltip>
+        <Tooltip color="blue" content={`Created the ${dateFr}`}>
+          <CalendarIcon className="w-6 h-6 text-primary-main" />
+        </Tooltip>
+      </div>
+      <div></div>
     </section>
   );
 }
