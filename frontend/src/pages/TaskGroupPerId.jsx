@@ -13,6 +13,7 @@ import {
   PencilIcon,
   ExclamationCircleIcon,
 } from "@heroicons/react/24/solid";
+import Column from "../components/TaskGroup/Column/Column";
 
 function TaskGroupPerId() {
   const { id } = useParams();
@@ -31,7 +32,7 @@ function TaskGroupPerId() {
     queryKey: ["tasks-all", id],
     queryFn: () => getAllTasksFromGroup(id),
   });
-  console.log(allTasksFetch.data);
+
   // Mutation to update the task group
   const taskGroupMutation = useMutation({
     mutationFn: (updatedTaskGroup) => updateTaskGroup(id, updatedTaskGroup),
@@ -127,6 +128,12 @@ function TaskGroupPerId() {
     );
   }
 
+  console.log(
+    queryClient
+      .getQueryData(["tasks-all", id])
+      .filter((element) => element.status === "Todo")
+  );
+
   return (
     <section className="mt-[100px] space-y-2">
       <div className="flex justify-between items-center">
@@ -177,10 +184,22 @@ function TaskGroupPerId() {
           }}
         />
       </div>
-      <div className="flex">
-        <div className="bg-gray-100 w-[466px]">1</div>
-        <div className="bg-gray-200 w-[466px]">2</div>
-        <div className="bg-gray-300 w-[466px]">3</div>
+      <div className="flex gap-4">
+        <Column
+          tasklist={allTasksFetch.data.filter(
+            (element) => element.status === "Todo"
+          )}
+        />
+        <Column
+          tasklist={allTasksFetch.data.filter(
+            (element) => element.status === "In progress"
+          )}
+        />
+        <Column
+          tasklist={allTasksFetch.data.filter(
+            (element) => element.status === "Done"
+          )}
+        />
       </div>
     </section>
   );

@@ -37,7 +37,7 @@ function DeleteComponent({ task }) {
           onClick={() => {
             setOpen((prev) => !prev);
           }}
-          className="bg-gray-400 p-2 hover:bg-gray-500 group"
+          className="bg-gray-300 p-2 hover:bg-gray-400 group"
         >
           <TrashIcon className="w-6 h-6 cursor-pointer text-black group-hover:text-red-500 transition-colors" />
         </Button>
