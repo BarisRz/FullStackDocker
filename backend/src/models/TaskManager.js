@@ -27,13 +27,19 @@ class TaskManager extends AbstractManager {
     );
     return result.insertId;
   }
-
   async updateTaskGroup(id, body, user_id) {
     const [result] = await this.database.query(
       `UPDATE task_group SET name = ?, is_public = ? WHERE id = ? AND user_id = ?`,
       [body.name, body.is_public, id, user_id]
     );
-    return result.affectedRows;
+    if (result.affectedRows === 0) return result.affectedRows;
+
+    const [[updatedTaskGroup]] = await this.database.query(
+      `SELECT * FROM task_group WHERE id = ? AND user_id = ?`,
+      [id, user_id]
+    );
+
+    return updatedTaskGroup;
   }
 
   async deleteTaskGroup(id, user_id) {

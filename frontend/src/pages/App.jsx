@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import axios from "axios";
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import { useAccessToken } from "../contexts/AccessTokenContext";
@@ -16,8 +15,6 @@ function App() {
     queryKey: ["refreshToken"],
     queryFn: handleRefreshToken,
     retry: 0,
-    staleTime: 14 * 60 * 1000, // 14 minutes
-    refetchInterval: 14 * 60 * 1000, // Refetch toutes les 14 minutes
   });
 
   useEffect(() => {
@@ -30,13 +27,19 @@ function App() {
       setUser(false);
       setAccessToken(false);
     }
-  }, [isSuccess, isError]);
+  }, [isSuccess, isError, data]);
 
   return (
     <>
       <Navbar fetching={isLoading} />
-      <main className="mt-[60px]">
-        <Outlet />
+      <main className="mt-[60px] max-w-[1400px] mx-auto">
+        {isLoading ? (
+          <section className="flex h-screen2 justify-center items-center">
+            <Spinner color="blue" className="w-12 h-12" />
+          </section>
+        ) : (
+          <Outlet />
+        )}
       </main>
     </>
   );

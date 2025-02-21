@@ -97,6 +97,7 @@ const handleRefreshToken = (req, res) => {
       process.env.APP_SECRET,
       async (err, decoded) => {
         if (err) {
+          res.clearCookie("refreshTokenLorga");
           return res.status(403).send("Invalid token");
         }
         const foundUser = await userManager.verifyRefreshToken(
@@ -108,6 +109,7 @@ const handleRefreshToken = (req, res) => {
           return res.status(403).send("User not found");
         }
         if (!foundUser || foundUser[0].user_id !== decoded.id) {
+          res.clearCookie("refreshTokenLorga");
           return res.status(403).send("Invalid token");
         }
         // Générer un nouveau accessToken
@@ -122,7 +124,7 @@ const handleRefreshToken = (req, res) => {
       }
     );
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
 };
 
@@ -155,10 +157,15 @@ const deleteUser = async (req, res) => {
     if (result === 0) {
       return res.sendStatus(404);
     }
+    res.clearCookie("refreshTokenLorga");
     res.sendStatus(200);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+};
+
+const userAuthorized = async (req, res) => {
+  return res.sendStatus(200);
 };
 
 module.exports = {
@@ -172,4 +179,5 @@ module.exports = {
   logout,
   changePassword,
   deleteUser,
+  userAuthorized,
 };

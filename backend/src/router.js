@@ -24,16 +24,17 @@ const {
 const {
   simulateBadConnection,
 } = require("./middlewares/simulateBadConnection");
+
 // API routes
-router.use(simulateBadConnection);
+// router.use(simulateBadConnection);
 /* User route */
 router.post(
   "/inscription",
   tokenGeneration,
   inscription,
-  emailConfirmation,
   sendMail,
   hashPassword,
+  emailConfirmation,
   userControllers.add
 ); // pseudo, email, password in body
 router.get("/verify-email", userControllers.emailConfirmation); // Token in body
@@ -50,6 +51,9 @@ router.get("/refresh", userControllers.handleRefreshToken);
 
 // Protected route
 router.use(verifyToken);
+
+//
+router.get("/protected-route", userControllers.userAuthorized);
 
 // User route
 router.put("/user/password", hashPassword, userControllers.changePassword); // password in body

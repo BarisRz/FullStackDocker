@@ -9,7 +9,7 @@ import {
   Spinner,
 } from "@material-tailwind/react";
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import {
   XMarkIcon,
@@ -23,18 +23,22 @@ import {
 import { logout } from "../../api/User/api";
 import { useUser } from "../../contexts/UserContext";
 import { useAccessToken } from "../../contexts/AccessTokenContext";
+import { Link } from "react-router-dom";
 
 function DrawerContent({ close }) {
   const { user, setUser } = useUser();
   const { setAccessToken } = useAccessToken();
   const [darkMode, setDarkMode] = useState(false);
+  const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationFn: logout,
     onSuccess: () => {
-      setAccessToken(null);
-      setUser(null);
+      setUser(false);
+      setAccessToken(false);
       toast.success("Logged out");
+      window.location.replace("/");
+      queryClient.clear();
       close();
     },
     onError: (error) => {
@@ -92,12 +96,14 @@ function DrawerContent({ close }) {
             />
           </ListItemSuffix>
         </ListItem>
-        <ListItem color="blue">
-          <ListItemPrefix>
-            <Square3Stack3DIcon className="w-5 h-5" />
-          </ListItemPrefix>
-          Task group
-        </ListItem>
+        <Link to={"/taskgroupslist"} onClick={close}>
+          <ListItem color="blue">
+            <ListItemPrefix>
+              <Square3Stack3DIcon className="w-5 h-5" />
+            </ListItemPrefix>
+            Task group
+          </ListItem>
+        </Link>
         {user.role === "admin" && (
           <ListItem color="blue">
             <ListItemPrefix>

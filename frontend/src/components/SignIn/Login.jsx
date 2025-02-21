@@ -23,7 +23,7 @@ function Login() {
     if (user) {
       navigate("/");
     }
-  }, []);
+  }, [user]);
 
   const { mutate, isPending } = useMutation({
     mutationFn: login,

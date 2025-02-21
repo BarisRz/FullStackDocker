@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { Button, Typography } from "@material-tailwind/react";
 import { Step, Stepper } from "@material-tailwind/react";
 import {
@@ -9,10 +9,13 @@ import {
   ArchiveBoxIcon,
 } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
+import { useUser } from "../contexts/UserContext";
 
 function Home() {
   const [activeStep, setActiveStep] = useState(0);
   const [hasClicked, setHasClicked] = useState(false);
+
+  const { user } = useUser();
 
   useEffect(() => {
     let intervalId;
@@ -33,7 +36,7 @@ function Home() {
     setHasClicked(true);
   };
   return (
-    <div className="w-full h-screen bg-gray-50 flex flex-col items-center justify-center">
+    <div className="h-screen2 bg-gray-50 flex flex-col items-center justify-center">
       {/* Hero Section */}
       <header className="text-center">
         <Typography variant="h2" className="font-bold text-gray-900">
@@ -47,25 +50,26 @@ function Home() {
           seamlessly. Plan, track, and manage your projects all in one place.{" "}
           <br />
           <span className="text-sm">
-            (To use the website you need to be connected for now)
+            (To use the website, you need to be logged in. Currently, it is only
+            available on desktop.)
           </span>
         </Typography>
         <Link
-          to={"/signin"}
+          to={user ? "/taskgroups" : "/signin"}
           className="flex justify-center w-[180px] justify-self-center"
         >
           <Button
             size="lg"
             color="blue"
             variant="gradient"
-            className="mt-6 flex items-center w-full"
+            className="mt-6 flex items-center"
           >
             Get Started <ArrowRightIcon className="h-5 w-5" />
           </Button>
         </Link>
       </header>
       {/* Features Section */}
-      <section className="mt-16 w-full max-w-7xl mx-auto px-4">
+      <section className="mt-16 mx-auto px-4">
         <Typography
           variant="h3"
           className="font-bold text-gray-900 text-center"

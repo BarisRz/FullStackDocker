@@ -21,7 +21,7 @@ module.exports = withMT({
         },
       },
       height: {
-        screen: "calc(100vh - 60px)", // 60px is the height of the navbar
+        screen2: "calc(100vh - 60px)", // 60px is the height of the navbar
       },
     },
   },
