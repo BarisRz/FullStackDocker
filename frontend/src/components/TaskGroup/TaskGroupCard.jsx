@@ -91,7 +91,7 @@ function TaskGroupCard({ taskGroup }) {
         </DialogBody>
         <DialogFooter className="space-x-2">
           <Button
-            color="black"
+            color="gray"
             onClick={() => {
               setOpen((prev) => !prev);
             }}

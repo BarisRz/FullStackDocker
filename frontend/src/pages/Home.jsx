@@ -50,7 +50,8 @@ function Home() {
           seamlessly. Plan, track, and manage your projects all in one place.{" "}
           <br />
           <span className="text-sm">
-            (To use the website you need to be connected for now)
+            (To use the website, you need to be logged in. Currently, it is only
+            available on desktop.)
           </span>
         </Typography>
         <Link

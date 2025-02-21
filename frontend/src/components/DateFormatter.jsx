@@ -3,7 +3,7 @@ const DateFormatter = (previousDate, options = {}) => {
 
   const date = new Date(previousDate);
 
-  return date.toLocaleDateString("fr-FR", {
+  return date.toLocaleDateString(options.langage || "fr-FR", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",

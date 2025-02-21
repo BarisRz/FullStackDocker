@@ -5,6 +5,7 @@ import { Typography, Spinner, Tooltip } from "@material-tailwind/react";
 import { getTaskGroup, updateTaskGroup } from "../api/TaskGroup/api";
 import { getAllTasksFromGroup } from "../api/Task/api";
 import DateFormatter from "../components/DateFormatter";
+import DeleteComponent from "../components/TaskGroup/DeleteComponent";
 import {
   EyeIcon,
   EyeSlashIcon,
@@ -12,8 +13,6 @@ import {
   PencilIcon,
   ExclamationCircleIcon,
 } from "@heroicons/react/24/solid";
-import toast from "react-hot-toast";
-import Card from "../components/TaskCard/Card";
 
 function TaskGroupPerId() {
   const { id } = useParams();
@@ -28,6 +27,11 @@ function TaskGroupPerId() {
     retry: 1,
   });
 
+  const allTasksFetch = useQuery({
+    queryKey: ["tasks-all", id],
+    queryFn: () => getAllTasksFromGroup(id),
+  });
+  console.log(allTasksFetch.data);
   // Mutation to update the task group
   const taskGroupMutation = useMutation({
     mutationFn: (updatedTaskGroup) => updateTaskGroup(id, updatedTaskGroup),
@@ -115,51 +119,69 @@ function TaskGroupPerId() {
   const date = taskGroupFetchId.data.creation_date;
   const dateFr = DateFormatter(date);
 
+  if (allTasksFetch.isLoading) {
+    return (
+      <section className="flex h-screen2 justify-center items-center">
+        <Spinner color="blue" className="w-12 h-12" />
+      </section>
+    );
+  }
+
   return (
     <section className="mt-[100px] space-y-2">
-      <div className="flex items-center gap-2">
-        {isInputOpen ? (
-          <input
-            type="text"
-            size={inputValue.length || 1}
-            className="text-4xl focus:outline-none rounded-lg bg-primary-background font-bold p-0 m-0 w-auto"
-            autoFocus
-            value={inputValue}
-            onBlur={handleBlur}
-            onChange={handleInputChange}
-            onKeyDown={(e) => e.key === "Enter" && handleBlur()}
-          />
-        ) : (
-          <Typography variant="h2">{taskGroupFetchId.data.name}</Typography>
-        )}
-        <Tooltip color="blue" content="Edit">
-          <PencilIcon
-            className="w-6 h-6 text-primary-main cursor-pointer"
-            onClick={handleEditClick}
-          />
-        </Tooltip>
-
-        <Tooltip
-          color="blue"
-          content={taskGroupFetchId.data.is_public ? "Public" : "Private"}
-        >
-          {taskGroupFetchId.data.is_public ? (
-            <EyeIcon
-              className="w-6 h-6 text-primary-main cursor-pointer"
-              onClick={() => handleUpdate("is_public", 0)}
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          {isInputOpen ? (
+            <input
+              type="text"
+              size={inputValue.length || 1}
+              className="text-4xl focus:outline-none rounded-lg bg-primary-background font-bold p-0 m-0 w-auto"
+              autoFocus
+              value={inputValue}
+              onBlur={handleBlur}
+              onChange={handleInputChange}
+              onKeyDown={(e) => e.key === "Enter" && handleBlur()}
             />
           ) : (
-            <EyeSlashIcon
-              className="w-6 h-6 text-primary-main cursor-pointer"
-              onClick={() => handleUpdate("is_public", 1)}
-            />
+            <Typography variant="h2">{taskGroupFetchId.data.name}</Typography>
           )}
-        </Tooltip>
-        <Tooltip color="blue" content={`Created the ${dateFr}`}>
-          <CalendarIcon className="w-6 h-6 text-primary-main" />
-        </Tooltip>
+          <Tooltip content="Edit">
+            <PencilIcon
+              className="w-6 h-6 cursor-pointer text-primary-main"
+              onClick={handleEditClick}
+            />
+          </Tooltip>
+          <Tooltip
+            content={taskGroupFetchId.data.is_public ? "Public" : "Private"}
+          >
+            {taskGroupFetchId.data.is_public ? (
+              <EyeIcon
+                className="w-6 h-6 text-primary-main cursor-pointer"
+                onClick={() => handleUpdate("is_public", 0)}
+              />
+            ) : (
+              <EyeSlashIcon
+                className="w-6 h-6 text-primary-main cursor-pointer"
+                onClick={() => handleUpdate("is_public", 1)}
+              />
+            )}
+          </Tooltip>
+          <Tooltip content={`Created the ${dateFr}`}>
+            <CalendarIcon className="w-6 h-6 text-primary-main" />
+          </Tooltip>
+        </div>
+        <DeleteComponent
+          task={{
+            name: taskGroupFetchId.data.name,
+            id: taskGroupFetchId.data.id,
+          }}
+        />
       </div>
-      <div></div>
+      <div className="flex">
+        <div className="bg-gray-100 w-[466px]">1</div>
+        <div className="bg-gray-200 w-[466px]">2</div>
+        <div className="bg-gray-300 w-[466px]">3</div>
+      </div>
     </section>
   );
 }
