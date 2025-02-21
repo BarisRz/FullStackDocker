@@ -9,6 +9,9 @@ services:
       - backend
     networks:
       - app_network
+    volumes:
+      - ./frontend:/app # Monte le code local dans le conteneur
+      - /app/node_modules # Évite les conflits avec node_modules dans le conteneur
 
   backend:
     build:
@@ -25,6 +28,9 @@ services:
       DB_NAME: ${DB_NAME}
     networks:
       - app_network
+    volumes:
+      - ./backend:/app # Monte le code local dans le conteneur
+      - /app/node_modules # Évite les conflits avec node_modules dans le conteneur
 
   db:
     image: mysql:8.0
