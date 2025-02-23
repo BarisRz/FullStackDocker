@@ -1,13 +1,6 @@
 import { useState } from "react";
 import Card from "../../TaskCard/Card";
-import {
-  Typography,
-  Chip,
-  Dialog,
-  DialogFooter,
-  DialogBody,
-  Button,
-} from "@material-tailwind/react";
+import { Typography, Chip, Button } from "@material-tailwind/react";
 import { PlusIcon } from "@heroicons/react/24/solid";
 
 function Column({ tasklist, title }) {
@@ -32,9 +25,13 @@ function Column({ tasklist, title }) {
         ))}
       </div>
       <div className="p-2 flex gap-2 overflow-auto">
-        <Button className="flex p-2 gap-2 pr-5" color="blue">
+        <Button
+          className="flex p-2 gap-2 pr-5 hover:shadow-none shadow-none rounded-xl"
+          color="blue"
+          variant="gradient"
+        >
           <PlusIcon className="w-6 h-6" />
-          <Typography variant="button">Add a task</Typography>
+          <Typography>Add a task</Typography>
         </Button>
       </div>
     </div>

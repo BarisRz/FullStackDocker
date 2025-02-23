@@ -47,7 +47,7 @@ function TaskGroupCard({ taskGroup }) {
   return (
     <>
       <Link to={`/taskgroups/${taskGroup.id}`} className="flex-1">
-        <ListItem className="bg-gray-100 hover:bg-gray-300">
+        <ListItem className="bg-primary-main/10 hover:bg-primary-main/25">
           <Typography variant="h5">{taskGroup.name}</Typography>
           <ListItemSuffix className="flex gap-2 items-center">
             <Tooltip content="Visibility">
