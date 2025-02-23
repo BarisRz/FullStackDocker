@@ -52,7 +52,7 @@ class TaskManager extends AbstractManager {
 
   async createTask(id, task) {
     const [result] = await this.database.query(
-      `INSERT INTO ${this.table} (user_id, title, content, status, expiration_date, task_group_id) VALUES (?,?,?,?,?,?)`,
+      `INSERT INTO ${this.table} (user_id, title, content, status, expiration_date, task_group_id, priority) VALUES (?,?,?,?,?,?,?)`,
       [
         id,
         task.title,
@@ -60,6 +60,7 @@ class TaskManager extends AbstractManager {
         task.status,
         task.expiration_date,
         task.task_group_id,
+        task.priority,
       ]
     );
     return result.insertId;
@@ -83,8 +84,16 @@ class TaskManager extends AbstractManager {
 
   async updateTask(id, body, user_id) {
     const [result] = await this.database.query(
-      `UPDATE ${this.table} SET title = ?, content = ?, status = ?, expiration_date = ? WHERE id = ? AND user_id = ?`,
-      [body.title, body.content, body.status, body.expiration_date, id, user_id]
+      `UPDATE ${this.table} SET title = ?, content = ?, status = ?, expiration_date = ?, priority = ? WHERE id = ? AND user_id = ?`,
+      [
+        body.title,
+        body.content,
+        body.status,
+        body.expiration_date,
+        body.priority,
+        id,
+        user_id,
+      ]
     );
     return result.affectedRows;
   }

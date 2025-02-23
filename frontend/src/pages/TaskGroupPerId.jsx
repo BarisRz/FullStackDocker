@@ -128,12 +128,6 @@ function TaskGroupPerId() {
     );
   }
 
-  console.log(
-    queryClient
-      .getQueryData(["tasks-all", id])
-      .filter((element) => element.status === "Todo")
-  );
-
   return (
     <section className="mt-[100px] space-y-2">
       <div className="flex justify-between items-center">
@@ -189,16 +183,19 @@ function TaskGroupPerId() {
           tasklist={allTasksFetch.data.filter(
             (element) => element.status === "Todo"
           )}
+          title={"To do"}
         />
         <Column
           tasklist={allTasksFetch.data.filter(
             (element) => element.status === "In progress"
           )}
+          title={"In progress"}
         />
         <Column
           tasklist={allTasksFetch.data.filter(
             (element) => element.status === "Done"
           )}
+          title={"Done"}
         />
       </div>
     </section>
