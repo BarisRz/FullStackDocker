@@ -5,10 +5,9 @@ class TaskManager extends AbstractManager {
     super({ table: "task" });
   }
   async readAll(id) {
-    const [list] = await this.database.query(
-      `SELECT * FROM task_group WHERE user_id = ?`,
-      [id]
-    );
+    const request = `SELECT tg.*, COUNT(t.id) AS task_count FROM task_group tg LEFT JOIN task t ON tg.id = t.task_group_id WHERE tg.user_id = ? GROUP BY tg.id`;
+    const [list] = await this.database.query(request, [id]);
+    console.log(list);
     return list;
   }
 

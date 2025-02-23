@@ -10,6 +10,7 @@ import {
   Button,
   Typography,
   Tooltip,
+  Chip,
 } from "@material-tailwind/react";
 import {
   TrashIcon,
@@ -47,8 +48,13 @@ function TaskGroupCard({ taskGroup }) {
   return (
     <>
       <Link to={`/taskgroups/${taskGroup.id}`} className="flex-1">
-        <ListItem className="bg-primary-main/10 hover:bg-primary-main/25">
+        <ListItem className="bg-primary-main/10 hover:bg-primary-main/25 flex gap-2">
           <Typography variant="h5">{taskGroup.name}</Typography>
+          <Tooltip content="Number of tasks">
+            <Typography variant="paragraph" className="text-gray-500">
+              <Chip color="blue" value={taskGroup.task_count} size="sm" />
+            </Typography>
+          </Tooltip>
           <ListItemSuffix className="flex gap-2 items-center">
             <Tooltip content="Visibility">
               {taskGroup.is_public ? (
