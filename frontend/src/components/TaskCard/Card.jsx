@@ -1,5 +1,5 @@
-import { Card as C } from "@material-tailwind/react";
-import { Typography, Tooltip } from "@material-tailwind/react";
+import { useState } from "react";
+import { Typography, Tooltip, Dialog } from "@material-tailwind/react";
 import {
   PencilSquareIcon,
   CalendarIcon,
@@ -7,15 +7,35 @@ import {
   ClockIcon,
 } from "@heroicons/react/24/solid";
 import DateFormatter from "../DateFormatter";
+import CardDialog from "./CardDialog";
 
 function Card({ task }) {
-  console.log(task);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [canOpenDialog, setCanOpenDialog] = useState(true);
+
   const creation_date = DateFormatter(task.creation_date);
   const expiration_date = DateFormatter(task.expiration_date);
+
+  const handleCardClick = () => {
+    if (canOpenDialog) {
+      setIsDialogOpen(true);
+    }
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+    setCanOpenDialog(false);
+
+    setTimeout(() => {
+      setCanOpenDialog(true);
+    }, 100);
+  };
+
   return (
-    <C
-      className="rounded-xl p-2 bg-primary-background space-y-2 cursor-grab active:cursor-grabbing"
+    <div
+      className="rounded-xl p-2 bg-primary-background space-y-2 cursor-pointer active:cursor-grabbing shadow-md"
       draggable="true"
+      onClick={handleCardClick}
     >
       <Typography variant="h5">{task.title}</Typography>
       <div className="flex justify-between">
@@ -39,7 +59,8 @@ function Card({ task }) {
           )}
         </div>
       </div>
-    </C>
+      <CardDialog task={task} handler={handleCloseDialog} open={isDialogOpen} />
+    </div>
   );
 }
 
