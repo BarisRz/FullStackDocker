@@ -5,11 +5,27 @@ import { PlusIcon } from "@heroicons/react/24/solid";
 
 function Column({ tasklist, title }) {
   const [isdragHoverActive, setIsDragHoverActive] = useState(false);
+  const [onDropPosition, setOnDropPosition] = useState(null);
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragHoverActive(false);
+    setOnDropPosition(title);
+    console.log(e.target.id);
+  };
+
   return (
     <div
       className={`flex-1 ${
         isdragHoverActive ? "bg-primary-main/25" : "bg-primary-main/15"
       } rounded-xl transition-colors`}
+      onDragOver={(e) => {
+        e.preventDefault();
+        setIsDragHoverActive(true);
+      }}
+      onDragLeave={() => setIsDragHoverActive(false)}
+      onDrop={handleDrop}
+      id={title}
     >
       <div className="px-4 py-3 flex justify-between">
         <Typography variant="h4">{title}</Typography>
@@ -21,7 +37,12 @@ function Column({ tasklist, title }) {
       </div>
       <div className="p-2 space-y-2 max-h-[70vh] overflow-auto">
         {tasklist.map((task) => (
-          <Card key={task.id} task={task} />
+          <Card
+            key={task.id}
+            task={task}
+            onDropPosition={onDropPosition}
+            setOnDropPosition={setOnDropPosition}
+          />
         ))}
       </div>
       <div className="p-2 flex gap-2 overflow-auto">
