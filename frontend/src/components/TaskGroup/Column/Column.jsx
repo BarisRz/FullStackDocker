@@ -24,10 +24,6 @@ function Column({ tasklist, title, taskGroupId }) {
       queryClient.setQueryData(["tasks-all", taskGroupId], newTaskGroupList);
       return { previousTaskGroupList };
     },
-    onSuccess: () => {
-      toast.success("Task updated");
-      // queryClient.invalidateQueries(["tasks-all", taskGroupId]);
-    },
     onError: (err, _, context) => {
       toast.error("An error occurred");
       if (context.previousTaskGroupList) {
