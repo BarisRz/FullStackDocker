@@ -13,9 +13,19 @@ function Column({ tasklist, title, taskGroupId }) {
 
   const updateTaskMutation = useMutation({
     mutationFn: ({ id, task }) => updateTask(id, task),
+    onMutate: async ({ id, task }) => {
+      const previousTaskGroupList = queryClient.getQueryData([
+        "tasks-all",
+        taskGroupId,
+      ]);
+      const newTaskGroupList = previousTaskGroupList.map((element) =>
+        element.id == id ? { ...element, ...task } : element
+      );
+      queryClient.setQueryData(["tasks-all", taskGroupId], newTaskGroupList);
+    },
     onSuccess: () => {
       toast.success("Task updated");
-      queryClient.invalidateQueries(["tasks-all", taskGroupId]);
+      // queryClient.invalidateQueries(["tasks-all", taskGroupId]);
     },
     onError: (error) => {
       toast.error("An error occurred");
