@@ -93,7 +93,12 @@ class TaskManager extends AbstractManager {
         user_id,
       ]
     );
-    return result.affectedRows;
+    if (result.affectedRows === 0) return result.affectedRows;
+    const [[updatedTask]] = await this.database.query(
+      `SELECT * FROM ${this.table} WHERE id = ? AND user_id = ?`,
+      [id, user_id]
+    );
+    return updatedTask;
   }
 
   async deleteTask(id, user_id) {

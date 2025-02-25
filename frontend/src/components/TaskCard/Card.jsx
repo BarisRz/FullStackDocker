@@ -9,7 +9,7 @@ import {
 import DateFormatter from "../DateFormatter";
 import CardDialog from "./CardDialog";
 
-function Card({ task, onDropPosition, setOnDropPosition }) {
+function Card({ task, setOnDropPosition }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [canOpenDialog, setCanOpenDialog] = useState(true);
 
@@ -31,15 +31,18 @@ function Card({ task, onDropPosition, setOnDropPosition }) {
     }, 500);
   };
 
+  const handleDragStart = (e) => {
+    setOnDropPosition(null);
+    console.log("drag start", task.id);
+    e.dataTransfer.setData(["task_id"], task.id);
+  };
+
   return (
     <div
       className="rounded-xl p-2 bg-primary-background space-y-2 cursor-pointer active:cursor-grabbing shadow-md"
       draggable="true"
       onClick={handleCardClick}
-      onDragStart={() => setOnDropPosition(null)}
-      onDragEnd={() => {
-        console.log("drag end", task.id);
-      }}
+      onDragStart={handleDragStart}
     >
       <Typography variant="h5">{task.title}</Typography>
       <div className="flex justify-between">

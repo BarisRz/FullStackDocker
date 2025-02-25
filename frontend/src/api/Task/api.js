@@ -5,4 +5,9 @@ const getAllTasksFromGroup = async (groupId) => {
   return response.data;
 };
 
-export { getAllTasksFromGroup };
+const updateTask = async (taskId, task) => {
+  const response = await protectedApi.put(`/task/${taskId}`, task);
+  return response.data;
+};
+
+export { getAllTasksFromGroup, updateTask };

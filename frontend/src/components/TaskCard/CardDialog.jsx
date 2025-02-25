@@ -59,9 +59,15 @@ function CardDialog({ task, open, handler }) {
               </Typography>
             </div>
             <div className="pr-10">
-              <Typography variant="paragraph" className="text-primary-text">
-                {task.content}
-              </Typography>
+              {task.content ? (
+                <Typography variant="paragraph" className="text-primary-text">
+                  {task.content}
+                </Typography>
+              ) : (
+                <Typography variant="paragraph" className="text-primary-text">
+                  No description
+                </Typography>
+              )}
             </div>
           </div>
           <div className="flex-[2] flex flex-col gap-2">
