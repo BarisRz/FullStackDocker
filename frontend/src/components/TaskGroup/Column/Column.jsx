@@ -113,7 +113,7 @@ function Column({ tasklist, title, taskGroupId }) {
           </motion.div>
         )}
       </div>
-      <motion.div layout className="p-2 flex gap-2 overflow-auto">
+      <motion.div className="p-2 flex gap-2 overflow-auto">
         <Button
           className="flex p-2 gap-2 pr-5 hover:shadow-none shadow-none rounded-xl"
           color="blue"
