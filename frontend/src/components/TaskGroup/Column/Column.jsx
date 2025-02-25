@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion } from "motion/react";
 import Card from "../../TaskCard/Card";
 import { Typography, Chip, Button } from "@material-tailwind/react";
 import { PlusIcon, FolderPlusIcon } from "@heroicons/react/24/solid";
@@ -57,7 +58,7 @@ function Column({ tasklist, title, taskGroupId }) {
     e.preventDefault();
     setIsDragHoverActive(false);
     setOnDropPosition(title);
-    const task = e.dataTransfer.getData("task_id");
+    const task = window.currentDraggedTask;
     console.log("Task", task, "will go to", title);
     const newTask = handleTaskUpdate(task, { status: title });
     console.log("New task", newTask);
@@ -65,7 +66,8 @@ function Column({ tasklist, title, taskGroupId }) {
   };
 
   return (
-    <div
+    <motion.div
+      layout
       className={`flex-1 ${
         isdragHoverActive ? "bg-primary-main/25" : "bg-primary-main/15"
       } rounded-xl transition-colors`}
@@ -88,7 +90,7 @@ function Column({ tasklist, title, taskGroupId }) {
           className="h-8 self-center text-lg flex justify-center items-center"
         />
       </div>
-      <div className="p-2 space-y-2 max-h-[70vh] overflow-auto">
+      <div className="p-2 space-y-2 max-h-[70vh]">
         {tasklist.map((task) => (
           <Card
             key={task.id}
@@ -98,13 +100,18 @@ function Column({ tasklist, title, taskGroupId }) {
           />
         ))}
         {isdragHoverActive && (
-          <div className="bg-primary-main/50 h-[70px] rounded-xl shadow flex items-center justify-center gap-2">
+          <motion.div
+            layout
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-primary-main/50 h-[75px] rounded-xl shadow flex items-center justify-center gap-2"
+          >
             <FolderPlusIcon className="w-8 h-8 animate-bounce" />
             <Typography variant="h5">Add here</Typography>
-          </div>
+          </motion.div>
         )}
       </div>
-      <div className="p-2 flex gap-2 overflow-auto">
+      <motion.div layout className="p-2 flex gap-2 overflow-auto">
         <Button
           className="flex p-2 gap-2 pr-5 hover:shadow-none shadow-none rounded-xl"
           color="blue"
@@ -113,8 +120,8 @@ function Column({ tasklist, title, taskGroupId }) {
           <PlusIcon className="w-6 h-6" />
           <Typography>Add a task</Typography>
         </Button>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 

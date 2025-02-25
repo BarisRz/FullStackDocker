@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion } from "motion/react";
 import { Typography, Tooltip, Dialog } from "@material-tailwind/react";
 import {
   PencilSquareIcon,
@@ -34,11 +35,13 @@ function Card({ task, setOnDropPosition }) {
   const handleDragStart = (e) => {
     setOnDropPosition(null);
     console.log("drag start", task.id);
-    e.dataTransfer.setData(["task_id"], task.id);
+    window.currentDraggedTask = task.id;
   };
 
   return (
-    <div
+    <motion.div
+      layout
+      layoutId={task.id}
       className="rounded-xl p-2 bg-primary-background space-y-2 cursor-pointer active:cursor-grabbing shadow-md"
       draggable="true"
       onClick={handleCardClick}
@@ -67,7 +70,7 @@ function Card({ task, setOnDropPosition }) {
         </div>
       </div>
       <CardDialog task={task} handler={handleCloseDialog} open={isDialogOpen} />
-    </div>
+    </motion.div>
   );
 }
 
