@@ -6,6 +6,7 @@ import { PlusIcon, FolderPlusIcon } from "@heroicons/react/24/solid";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { updateTask } from "../../../api/Task/api";
 import toast from "react-hot-toast";
+import dragStore from "../../TaskCard/DragStore";
 
 function Column({ tasklist, title, taskGroupId }) {
   const [isdragHoverActive, setIsDragHoverActive] = useState(false);
@@ -58,11 +59,12 @@ function Column({ tasklist, title, taskGroupId }) {
     e.preventDefault();
     setIsDragHoverActive(false);
     setOnDropPosition(title);
-    const task = window.currentDraggedTask;
+    const task = dragStore.currentTask;
     console.log("Task", task, "will go to", title);
     const newTask = handleTaskUpdate(task, { status: title });
     console.log("New task", newTask);
     updateTaskMutation.mutate({ id: task, task: newTask });
+    dragStore.currentTask = null;
   };
 
   return (

@@ -9,6 +9,7 @@ import {
 } from "@heroicons/react/24/solid";
 import DateFormatter from "../DateFormatter";
 import CardDialog from "./CardDialog";
+import dragStore from "../TaskCard/DragStore";
 
 function Card({ task, setOnDropPosition }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -35,7 +36,7 @@ function Card({ task, setOnDropPosition }) {
   const handleDragStart = (e) => {
     setOnDropPosition(null);
     console.log("drag start", task.id);
-    window.currentDraggedTask = task.id;
+    dragStore.currentTask = task.id;
   };
 
   return (
