@@ -25,11 +25,13 @@ import {
 import DateFormatter from "../DateFormatter";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteTask } from "../../api/Task/api";
+import { deleteTask, updateTask } from "../../api/Task/api";
 import toast from "react-hot-toast";
 
 function CardDialog({ task, open, handler }) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [isInputOpen, setIsInputOpen] = useState(false);
   const queryClient = useQueryClient();
   const date = DateFormatter(task.creation_date);
 
@@ -63,13 +65,86 @@ function CardDialog({ task, open, handler }) {
     },
   });
 
+  const updateTaskMutation = useMutation({
+    mutationFn: ({ taskId, newTask }) => updateTask(taskId, newTask),
+    onMutate: async ({ taskId, newTask }) => {
+      // await queryClient.cancelQueries(["tasks-all", task.task_group_id]);
+      const previousTaskGroupList = queryClient.getQueryData([
+        "tasks-all",
+        task.task_group_id,
+      ]);
+      const newTaskGroupList = previousTaskGroupList.map((element) =>
+        element.id == taskId ? { ...element, ...newTask } : element
+      );
+      console.log(newTaskGroupList);
+      queryClient.setQueryData(
+        ["tasks-all", task.task_group_id],
+        newTaskGroupList
+      );
+      return { previousTaskGroupList };
+    },
+    onSuccess: () => {
+      toast.success("Task updated");
+    },
+    onError: (err, _, context) => {
+      toast.error("An error occurred");
+      if (context.previousTaskGroupList) {
+        queryClient.setQueryData(
+          ["tasks-all", task.task_group_id],
+          context.previousTaskGroupList
+        );
+      }
+    },
+  });
+
+  const handleTitleInput = () => {
+    setIsInputOpen(!isInputOpen);
+    setInputValue(task.title);
+  };
+
+  const handleTitleChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleTitleBlur = () => {
+    if (inputValue.trim().length < 3) return;
+    console.log(inputValue);
+    handleUpdateTask(inputValue, "title");
+    setInputValue("");
+    setIsInputOpen(false);
+  };
+
+  const handleUpdateTask = (value, key) => {
+    const beforeChangeTask = task;
+    const changedTask = { ...beforeChangeTask, [key]: value };
+    updateTaskMutation.mutate({ taskId: task.id, newTask: changedTask });
+  };
+
   return (
     <Dialog open={open} handler={handler}>
       <DialogHeader className="flex justify-between">
         <div className="flex items-center gap-2">
           <DocumentIcon className="w-6 h-6 text-primary-main" />
-          <Typography variant="h4">{task.title}</Typography>
-          <PencilIcon className="w-5 h-5 text-primary-text" />
+          {isInputOpen ? (
+            <input
+              className="p-0 m-0 outline-none"
+              value={inputValue}
+              onChange={handleTitleChange}
+              onBlur={handleTitleBlur}
+              size={inputValue.length || 1}
+              onKeyDown={(e) =>
+                (e.key === "Enter" || e.key === "Escape") && handleTitleBlur()
+              }
+              maxLength={20}
+              autoFocus
+            ></input>
+          ) : (
+            <h4>{task.title}</h4>
+          )}
+          <PencilIcon
+            className="w-5 h-5 text-primary-text"
+            onClick={handleTitleInput}
+          />
           <Tooltip content={`Created the ${date}`} className="fixed z-[10000]">
             <CalendarIcon className="w-6 h-6 text-primary-main" />
           </Tooltip>
