@@ -38,7 +38,6 @@ function Card({ task, setOnDropPosition }) {
     // console.log("drag start", task.id);
     dragStore.currentTask = task.id;
   };
-  console.log(task);
   return (
     <motion.div
       layout

@@ -80,6 +80,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             position="top-center"
             containerStyle={{
               top: 70,
+              zIndex: 10000,
             }}
           />
         </QueryClientProvider>

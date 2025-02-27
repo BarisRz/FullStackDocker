@@ -68,7 +68,7 @@ router.delete("/task-group/:id", taskControllers.deleteGroup);
 router.put("/task-group/:id", taskControllers.updateTaskGroup);
 
 // Task route
-router.post("/task", taskControllers.addTask); // title, status, task_group_id in body
+router.post("/task", taskControllers.addTask); // title*, content, status*, priority*, expiration_date, task_group_id* in body
 router.get("/task/:id", taskControllers.findTask); // id in params
 router.get("/task-all/:group_id", taskControllers.findAllTaskFromGroup); // group_id in params
 router.put("/task/:id", taskControllers.updateTask); // id in params, title, content?, expiration date?, status in body

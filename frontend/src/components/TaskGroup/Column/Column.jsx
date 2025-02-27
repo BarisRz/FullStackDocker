@@ -92,7 +92,7 @@ function Column({ tasklist, title, taskGroupId }) {
           className="h-8 self-center text-lg flex justify-center items-center"
         />
       </div>
-      <div className="p-2 space-y-2 max-h-[70vh]">
+      <div className="p-2 space-y-2 max-h-[70vh] overflow-auto">
         {tasklist.map((task) => (
           <Card
             key={task.id}

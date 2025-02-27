@@ -25,13 +25,13 @@ import {
 import DateFormatter from "../DateFormatter";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteTask, updateTask } from "../../api/Task/api";
+import { deleteTask, updateTask, addTask } from "../../api/Task/api";
 import toast from "react-hot-toast";
 
 function CardDialog({ task, open, handler }) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [inputValue, setInputValue] = useState("");
   const [isInputOpen, setIsInputOpen] = useState(false);
+  const [taskCopy, setTaskCopy] = useState(task);
   const queryClient = useQueryClient();
   const date = DateFormatter(task.creation_date);
 
@@ -68,7 +68,7 @@ function CardDialog({ task, open, handler }) {
   const updateTaskMutation = useMutation({
     mutationFn: ({ taskId, newTask }) => updateTask(taskId, newTask),
     onMutate: async ({ taskId, newTask }) => {
-      // await queryClient.cancelQueries(["tasks-all", task.task_group_id]);
+      await queryClient.cancelQueries(["tasks-all", task.task_group_id]);
       const previousTaskGroupList = queryClient.getQueryData([
         "tasks-all",
         task.task_group_id,
@@ -97,20 +97,29 @@ function CardDialog({ task, open, handler }) {
     },
   });
 
+  const copyTaskMutation = useMutation({
+    mutationFn: (taskCopy) => addTask(taskCopy),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["tasks-all", task.task_group_id]);
+      toast.success("Task copied");
+    },
+    onError: () => {
+      toast.error("An error occurred");
+    },
+  });
+
   const handleTitleInput = () => {
     setIsInputOpen(!isInputOpen);
-    setInputValue(task.title);
   };
 
   const handleTitleChange = (e) => {
-    setInputValue(e.target.value);
+    setTaskCopy({ ...taskCopy, title: e.target.value });
   };
 
   const handleTitleBlur = () => {
-    if (inputValue.trim().length < 3) return;
-    console.log(inputValue);
-    handleUpdateTask(inputValue, "title");
-    setInputValue("");
+    if (taskCopy.title.trim().length < 3) return;
+    console.log(taskCopy.title);
+    handleUpdateTask(taskCopy.title, "title");
     setIsInputOpen(false);
   };
 
@@ -118,6 +127,16 @@ function CardDialog({ task, open, handler }) {
     const beforeChangeTask = task;
     const changedTask = { ...beforeChangeTask, [key]: value };
     updateTaskMutation.mutate({ taskId: task.id, newTask: changedTask });
+  };
+
+  const handleCopyTask = (e) => {
+    const newTask = task;
+    delete newTask.id;
+    delete newTask.creation_date;
+    delete newTask.user_id;
+    copyTaskMutation.mutate(newTask);
+    e.stopPropagation();
+    handler();
   };
 
   return (
@@ -128,10 +147,10 @@ function CardDialog({ task, open, handler }) {
           {isInputOpen ? (
             <input
               className="p-0 m-0 outline-none"
-              value={inputValue}
+              value={taskCopy.title}
               onChange={handleTitleChange}
               onBlur={handleTitleBlur}
-              size={inputValue.length || 1}
+              size={taskCopy.title || 1}
               onKeyDown={(e) =>
                 (e.key === "Enter" || e.key === "Escape") && handleTitleBlur()
               }
@@ -142,7 +161,7 @@ function CardDialog({ task, open, handler }) {
             <h4>{task.title}</h4>
           )}
           <PencilIcon
-            className="w-5 h-5 text-primary-text"
+            className="w-5 h-5 text-primary-text cursor-pointer"
             onClick={handleTitleInput}
           />
           <Tooltip content={`Created the ${date}`} className="fixed z-[10000]">
@@ -181,15 +200,20 @@ function CardDialog({ task, open, handler }) {
             </div>
           </div>
           <div className="flex-[2] flex flex-col gap-2">
-            <Button className="rounded-lg flex gap-1 p-1 pl-2 items-center bg-green-50 text-primary-text">
-              <CheckIcon className="w-6 h-6 text-primary-main" />
-              Done?
-            </Button>
+            {task.status !== "Done" && (
+              <Button className="rounded-lg flex gap-1 p-1 pl-2 items-center bg-green-50 text-primary-text">
+                <CheckIcon className="w-6 h-6 text-primary-main" />
+                Done?
+              </Button>
+            )}
             <Button className="rounded-lg bg-primary-main/10 text-primary-text flex gap-1 p-1 pl-2 items-center">
               <CalendarDateRangeIcon className="w-6 h-6 text-primary-main" />
               Expiration
             </Button>
-            <Button className="rounded-lg bg-primary-main/10 text-primary-text flex gap-1 p-1 pl-2 items-center">
+            <Button
+              className="rounded-lg bg-primary-main/10 text-primary-text flex gap-1 p-1 pl-2 items-center"
+              onClick={handleCopyTask}
+            >
               <DocumentDuplicateIcon className="w-6 h-6 text-primary-main" />
               Copy
             </Button>
