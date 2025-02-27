@@ -35,10 +35,10 @@ function Card({ task, setOnDropPosition }) {
 
   const handleDragStart = (e) => {
     setOnDropPosition(null);
-    console.log("drag start", task.id);
+    // console.log("drag start", task.id);
     dragStore.currentTask = task.id;
   };
-
+  console.log(task);
   return (
     <motion.div
       layout

@@ -29,7 +29,6 @@ function SignUp() {
       if (error.response.status !== 201) {
         toast.error("An error occurred");
       }
-      console.error(error.response.data.error);
       setError(error.response.status);
     },
   });

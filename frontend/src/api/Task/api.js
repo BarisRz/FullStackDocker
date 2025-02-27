@@ -10,4 +10,14 @@ const updateTask = async (taskId, task) => {
   return response.data;
 };
 
-export { getAllTasksFromGroup, updateTask };
+const deleteTask = async (taskId) => {
+  const response = await protectedApi.delete(`/task/${taskId}`);
+  return response.data;
+};
+
+const addTask = async (task) => {
+  const response = await protectedApi.post("/task", task);
+  return response.data;
+};
+
+export { getAllTasksFromGroup, updateTask, deleteTask, addTask };

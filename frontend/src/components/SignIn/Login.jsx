@@ -36,7 +36,6 @@ function Login() {
     onError: (error) => {
       toast.error("An error occurred");
       if (error.response.status === 500) {
-        console.error("Server error");
       }
       setError(error.response.status);
     },

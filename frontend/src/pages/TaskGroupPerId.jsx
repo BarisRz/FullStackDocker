@@ -54,7 +54,6 @@ function TaskGroupPerId() {
 
     // Canceling the optimistic update
     onError: (err, _, context) => {
-      console.error(err);
       if (context.previousTaskGroup) {
         queryClient.setQueryData(["taskGroup", id], context.previousTaskGroup);
       }
@@ -129,7 +128,7 @@ function TaskGroupPerId() {
     );
   }
 
-  console.log(queryClient.getQueryData(["tasks-all", id]));
+  // console.log(queryClient.getQueryData(["tasks-all", id]));
 
   return (
     <section className="mt-[100px] space-y-2">

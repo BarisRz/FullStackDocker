@@ -42,11 +42,11 @@ function Column({ tasklist, title, taskGroupId }) {
       "tasks-all",
       taskGroupId,
     ]);
-    console.log("All tasks", allTaskFromGroup);
+    // console.log("All tasks", allTaskFromGroup);
     const beforeChangeTask = allTaskFromGroup.filter(
       (element) => element.id == id
     );
-    console.log("Before change", beforeChangeTask);
+    // console.log("Before change", beforeChangeTask);
     const changedTask = { ...beforeChangeTask[0], ...task };
     delete changedTask.id;
     delete changedTask.task_group_id;
@@ -60,9 +60,9 @@ function Column({ tasklist, title, taskGroupId }) {
     setIsDragHoverActive(false);
     setOnDropPosition(title);
     const task = dragStore.currentTask;
-    console.log("Task", task, "will go to", title);
+    // console.log("Task", task, "will go to", title);
     const newTask = handleTaskUpdate(task, { status: title });
-    console.log("New task", newTask);
+    // console.log("New task", newTask);
     updateTaskMutation.mutate({ id: task, task: newTask });
     dragStore.currentTask = null;
   };

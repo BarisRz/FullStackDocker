@@ -41,7 +41,6 @@ function TaskGroupCard({ taskGroup }) {
     },
     onError: (error) => {
       toast.error("An error occurred");
-      console.error(error.response.data.error);
     },
   });
 

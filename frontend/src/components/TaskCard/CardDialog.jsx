@@ -24,10 +24,45 @@ import {
 } from "@heroicons/react/24/solid";
 import DateFormatter from "../DateFormatter";
 import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteTask } from "../../api/Task/api";
+import toast from "react-hot-toast";
 
 function CardDialog({ task, open, handler }) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const queryClient = useQueryClient();
   const date = DateFormatter(task.creation_date);
+
+  const deleteTaskMutation = useMutation({
+    mutationFn: (id) => deleteTask(id),
+    onMutate: async (id) => {
+      const previousTaskGroupList = queryClient.getQueryData([
+        "tasks-all",
+        task.task_group_id,
+      ]);
+      const newTaskGroupList = previousTaskGroupList.filter(
+        (element) => element.id !== id
+      );
+      queryClient.setQueryData(
+        ["tasks-all", task.task_group_id],
+        newTaskGroupList
+      );
+      return { previousTaskGroupList };
+    },
+    onSuccess: () => {
+      toast.success("Task deleted");
+    },
+    onError: (err, _, context) => {
+      toast.error("An error occurred");
+      if (context.previousTaskGroupList) {
+        queryClient.setQueryData(
+          ["tasks-all", task.task_group_id],
+          context.previousTaskGroupList
+        );
+      }
+    },
+  });
+
   return (
     <Dialog open={open} handler={handler}>
       <DialogHeader className="flex justify-between">
@@ -100,7 +135,15 @@ function CardDialog({ task, open, handler }) {
                 <Button onClick={() => setIsDeleteDialogOpen(false)}>
                   Cancel
                 </Button>
-                <Button color="red">Delete</Button>
+                <Button
+                  color="red"
+                  onClick={() => {
+                    setIsDeleteDialogOpen(false);
+                    deleteTaskMutation.mutate(task.id);
+                  }}
+                >
+                  Delete
+                </Button>
               </PopoverContent>
             </Popover>
           </div>
