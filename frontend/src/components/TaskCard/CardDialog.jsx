@@ -30,8 +30,8 @@ import toast from "react-hot-toast";
 
 function CardDialog({ task, open, handler }) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [inputValue, setInputValue] = useState("");
   const [isInputOpen, setIsInputOpen] = useState(false);
+  const [taskCopy, setTaskCopy] = useState(task);
   const queryClient = useQueryClient();
   const date = DateFormatter(task.creation_date);
 
@@ -68,7 +68,7 @@ function CardDialog({ task, open, handler }) {
   const updateTaskMutation = useMutation({
     mutationFn: ({ taskId, newTask }) => updateTask(taskId, newTask),
     onMutate: async ({ taskId, newTask }) => {
-      // await queryClient.cancelQueries(["tasks-all", task.task_group_id]);
+      await queryClient.cancelQueries(["tasks-all", task.task_group_id]);
       const previousTaskGroupList = queryClient.getQueryData([
         "tasks-all",
         task.task_group_id,
@@ -99,18 +99,16 @@ function CardDialog({ task, open, handler }) {
 
   const handleTitleInput = () => {
     setIsInputOpen(!isInputOpen);
-    setInputValue(task.title);
   };
 
   const handleTitleChange = (e) => {
-    setInputValue(e.target.value);
+    setTaskCopy({ ...taskCopy, title: e.target.value });
   };
 
   const handleTitleBlur = () => {
-    if (inputValue.trim().length < 3) return;
-    console.log(inputValue);
-    handleUpdateTask(inputValue, "title");
-    setInputValue("");
+    if (taskCopy.title.trim().length < 3) return;
+    console.log(taskCopy.title);
+    handleUpdateTask(taskCopy.title, "title");
     setIsInputOpen(false);
   };
 
@@ -128,10 +126,10 @@ function CardDialog({ task, open, handler }) {
           {isInputOpen ? (
             <input
               className="p-0 m-0 outline-none"
-              value={inputValue}
+              value={taskCopy.title}
               onChange={handleTitleChange}
               onBlur={handleTitleBlur}
-              size={inputValue.length || 1}
+              size={taskCopy.title || 1}
               onKeyDown={(e) =>
                 (e.key === "Enter" || e.key === "Escape") && handleTitleBlur()
               }
