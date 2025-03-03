@@ -216,20 +216,20 @@ function CardDialog({ task, open, handler }) {
           </div>
           <div className="flex-[2] flex flex-col gap-2">
             {task.status !== "Done" && (
-              <Button
-                className="rounded-lg flex gap-1 p-1 pl-2 items-center bg-green-50 text-primary-text"
+              <div
+                className="card-button rounded-lg flex gap-1 p-1 pl-2 items-center bg-green-50 text-primary-text cursor-pointer font-semibold text-xs uppercase hover:shadow"
                 onClick={handleDoneTask}
               >
                 <CheckIcon className="w-6 h-6 text-primary-main" />
-                Done?
-              </Button>
+                Move to Done?
+              </div>
             )}
-            <Button className="rounded-lg bg-primary-main/10 text-primary-text flex gap-1 p-1 pl-2 items-center">
+            <Button className="card-button rounded-lg bg-primary-main/10 text-primary-text flex gap-1 p-1 pl-2 items-center">
               <CalendarDateRangeIcon className="w-6 h-6 text-primary-main" />
               Expiration
             </Button>
             <Button
-              className="rounded-lg bg-primary-main/10 text-primary-text flex gap-1 p-1 pl-2 items-center"
+              className="card-button rounded-lg bg-primary-main/10 text-primary-text flex gap-1 p-1 pl-2 items-center"
               onClick={handleCopyTask}
             >
               <DocumentDuplicateIcon className="w-6 h-6 text-primary-main" />
@@ -242,7 +242,7 @@ function CardDialog({ task, open, handler }) {
               offset={10}
             >
               <PopoverHandler>
-                <Button className="rounded-lg bg-red-400/10 text-primary-text flex gap-1 p-1 pl-2 items-center">
+                <Button className="card-button rounded-lg bg-red-400/10 text-primary-text flex gap-1 p-1 pl-2 items-center">
                   <TrashIcon className="w-6 h-6 text-primary-main" />
                   Delete
                 </Button>
