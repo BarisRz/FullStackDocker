@@ -147,6 +147,13 @@ function CardDialog({ task, open, handler }) {
     handler();
   };
 
+  const handleDoneTask = (e) => {
+    const newTask = { ...task, status: "Done" };
+    handleUpdateTask(newTask.status, "status");
+    e.stopPropagation();
+    handler();
+  };
+
   return (
     <Dialog open={open} handler={handler}>
       <DialogHeader className="flex justify-between">
@@ -209,7 +216,10 @@ function CardDialog({ task, open, handler }) {
           </div>
           <div className="flex-[2] flex flex-col gap-2">
             {task.status !== "Done" && (
-              <Button className="rounded-lg flex gap-1 p-1 pl-2 items-center bg-green-50 text-primary-text">
+              <Button
+                className="rounded-lg flex gap-1 p-1 pl-2 items-center bg-green-50 text-primary-text"
+                onClick={handleDoneTask}
+              >
                 <CheckIcon className="w-6 h-6 text-primary-main" />
                 Done?
               </Button>
