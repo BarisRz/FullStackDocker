@@ -99,12 +99,22 @@ function CardDialog({ task, open, handler }) {
 
   const copyTaskMutation = useMutation({
     mutationFn: (taskCopy) => addTask(taskCopy),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["tasks-all", task.task_group_id]);
+    onSuccess: async (data) => {
+      await queryClient.cancelQueries(["tasks-all", task.task_group_id]);
+      const previousTaskGroupList = queryClient.getQueryData([
+        "tasks-all",
+        task.task_group_id,
+      ]);
+      const newTask = { ...taskCopy, id: data?.insertId };
+      queryClient.setQueryData(
+        ["tasks-all", task.task_group_id],
+        [...previousTaskGroupList, newTask]
+      );
+      console.log(data?.insertId);
       toast.success("Task copied");
     },
     onError: () => {
-      toast.error("An error occurred");
+      toast.error("Could not copy the task");
     },
   });
 
@@ -131,9 +141,7 @@ function CardDialog({ task, open, handler }) {
 
   const handleCopyTask = (e) => {
     const newTask = task;
-    delete newTask.id;
     delete newTask.creation_date;
-    delete newTask.user_id;
     copyTaskMutation.mutate(newTask);
     e.stopPropagation();
     handler();
