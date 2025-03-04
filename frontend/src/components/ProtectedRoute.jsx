@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Spinner, Button } from "@material-tailwind/react";
 import { protectedRoute } from "../api/User/api";
 import { LockClosedIcon } from "@heroicons/react/24/solid";

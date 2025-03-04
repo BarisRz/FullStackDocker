@@ -65,7 +65,7 @@ const addTask = async (req, res) => {
   const { id } = req.user;
   try {
     const result = await taskManager.createTask(id, task);
-    res.status(200).json({ insertId: result });
+    res.status(201).json({ insertId: result });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -123,7 +123,10 @@ const updateTask = async (req, res) => {
   const body = req.body;
   try {
     const result = await taskManager.updateTask(id, body, user_id);
-    res.status(201).json({ updated: result });
+    if (result === 0) {
+      return res.sendStatus(404);
+    }
+    res.status(201).json(result);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

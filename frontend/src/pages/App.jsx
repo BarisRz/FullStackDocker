@@ -6,10 +6,12 @@ import { useUser } from "../contexts/UserContext";
 import { handleRefreshToken } from "../api/User/api";
 import { useQuery } from "@tanstack/react-query";
 import { Spinner } from "@material-tailwind/react";
+import { useQueryClient } from "@tanstack/react-query";
 
 function App() {
   const { setAccessToken } = useAccessToken();
   const { setUser } = useUser();
+  const queryClient = useQueryClient();
 
   const { data, isLoading, isSuccess, isError } = useQuery({
     queryKey: ["refreshToken"],
@@ -26,6 +28,7 @@ function App() {
       console.log("Error while refreshing token");
       setUser(false);
       setAccessToken(false);
+      queryClient.clear();
     }
   }, [isSuccess, isError, data]);
 

@@ -56,6 +56,7 @@ CREATE TABLE task (
     title VARCHAR(255) NOT NULL,
     content TEXT,
     status ENUM('Todo', 'In progress', 'Done') NOT NULL DEFAULT 'Todo',
+    priority ENUM('Low', 'Medium', 'High') NOT NULL DEFAULT 'Low',
     creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     expiration_date DATE,
     task_group_id INT,

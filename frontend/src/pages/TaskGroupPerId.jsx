@@ -16,7 +16,8 @@ import {
 import Column from "../components/TaskGroup/Column/Column";
 
 function TaskGroupPerId() {
-  const { id } = useParams();
+  const params = useParams();
+  const id = Number(params.id);
   const queryClient = useQueryClient();
   const [isInputOpen, setIsInputOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -53,7 +54,6 @@ function TaskGroupPerId() {
 
     // Canceling the optimistic update
     onError: (err, _, context) => {
-      console.error(err);
       if (context.previousTaskGroup) {
         queryClient.setQueryData(["taskGroup", id], context.previousTaskGroup);
       }
@@ -128,11 +128,7 @@ function TaskGroupPerId() {
     );
   }
 
-  console.log(
-    queryClient
-      .getQueryData(["tasks-all", id])
-      .filter((element) => element.status === "Todo")
-  );
+  // console.log(queryClient.getQueryData(["tasks-all", id]));
 
   return (
     <section className="mt-[100px] space-y-2">
@@ -189,16 +185,22 @@ function TaskGroupPerId() {
           tasklist={allTasksFetch.data.filter(
             (element) => element.status === "Todo"
           )}
+          title={"Todo"}
+          taskGroupId={id}
         />
         <Column
           tasklist={allTasksFetch.data.filter(
             (element) => element.status === "In progress"
           )}
+          title={"In progress"}
+          taskGroupId={id}
         />
         <Column
           tasklist={allTasksFetch.data.filter(
             (element) => element.status === "Done"
           )}
+          title={"Done"}
+          taskGroupId={id}
         />
       </div>
     </section>

@@ -60,6 +60,17 @@ function Navbar({ fetching }) {
                 </MenuItem>
               </Link>
             )}
+            <Link to={"/whatsnext"}>
+              <MenuItem color="blue">
+                <Typography
+                  variant="h6"
+                  color="blue-gray"
+                  className="flex items-center text-sm font-bold"
+                >
+                  Roadmap
+                </Typography>
+              </MenuItem>
+            </Link>
             <Link to={"/about"}>
               <MenuItem color="blue">
                 <Typography

@@ -25,3 +25,7 @@
 html {
   scrollbar-width: none; /* Firefox */
 }
+
+.card-button {
+  @apply hover:!shadow-md !shadow-none hover:border-primary-main border transition-colors;
+}
