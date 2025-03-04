@@ -141,7 +141,6 @@ function CardDialog({ task, open, handler }) {
 
   const handleCopyTask = (e) => {
     const newTask = task;
-    delete newTask.creation_date;
     copyTaskMutation.mutate(newTask);
     e.stopPropagation();
     handler();
@@ -247,20 +246,25 @@ function CardDialog({ task, open, handler }) {
                   Delete
                 </Button>
               </PopoverHandler>
-              <PopoverContent className="z-[10000] flex items-center gap-2">
-                Are you sure you want to delete this task?
-                <Button onClick={() => setIsDeleteDialogOpen(false)}>
-                  Cancel
-                </Button>
-                <Button
-                  color="red"
-                  onClick={() => {
-                    setIsDeleteDialogOpen(false);
-                    deleteTaskMutation.mutate(task.id);
-                  }}
-                >
-                  Delete
-                </Button>
+              <PopoverContent className="z-[10000] flex flex-col items-center gap-2">
+                <p>Are you sure you want to delete this task?</p>
+                <div className="flex gap-2 justify-between">
+                  <Button
+                    onClick={() => setIsDeleteDialogOpen(false)}
+                    color="blue"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    color="red"
+                    onClick={() => {
+                      setIsDeleteDialogOpen(false);
+                      deleteTaskMutation.mutate(task.id);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </div>
               </PopoverContent>
             </Popover>
           </div>

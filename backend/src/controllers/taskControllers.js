@@ -65,7 +65,7 @@ const addTask = async (req, res) => {
   const { id } = req.user;
   try {
     const result = await taskManager.createTask(id, task);
-    res.status(200).json({ insertId: result });
+    res.status(201).json({ insertId: result });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
