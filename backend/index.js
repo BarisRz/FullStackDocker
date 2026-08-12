@@ -4,7 +4,7 @@ require("dotenv").config();
 const app = require("./src/app");
 
 // Getting port from .env file, not the DB PORT!
-const port = process.env.APP_PORT;
+const port = process.env.PORT || 5000; // Default to 5000 if not specified
 
 // Starting the server and listening on the port
 app

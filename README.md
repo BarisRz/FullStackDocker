@@ -25,7 +25,7 @@ npm install
 
 ```bash
 # Port for the backend server (Express)
-APP_PORT=5000
+PORT=5000
 
 # Database configuration
 DB_HOST=localhost

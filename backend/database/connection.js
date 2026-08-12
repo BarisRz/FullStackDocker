@@ -5,7 +5,7 @@ const mysql = require("mysql2/promise");
 // Dont forget to setup your own .env
 const database = mysql.createPool({
   host: process.env.DB_HOST, // address of the server
-  port: process.env.DB_PORT, // port of the DB server (mysql), not to be confused with the APP_PORT !
+  port: process.env.DB_PORT, // port of the DB server (mysql), not to be confused with the PORT !
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
@@ -18,7 +18,7 @@ async function connectWithRetry() {
   } catch (err) {
     console.error(
       "Failed to connect to database, retrying in 5 seconds...",
-      err
+      err,
     );
     setTimeout(connectWithRetry, 5000);
   }
