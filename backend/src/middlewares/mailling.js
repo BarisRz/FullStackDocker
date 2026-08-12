@@ -32,10 +32,8 @@ const sendMail = async (req, res, next) => {
     console.log("Email sent to:", req.body.email);
     next();
   } catch (error) {
-    console.error("Nodemailer error:", error); // ← AJOUTE ÇA
-    res
-      .status(500)
-      .json({ error: "An error occurred while sending the email." });
+    console.error("Nodemailer error:", error);
+    res.status(500).json({ Nodemailer: error });
   }
 };
 
