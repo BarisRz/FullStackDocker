@@ -5,13 +5,14 @@ const { userManager } = require("../managers");
 const generateHtmlContent = require("./generateHtmlContent");
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASSWORD,
   },
 });
-
 const generateToken = () => {
   return crypto.randomBytes(32).toString("hex");
 };
